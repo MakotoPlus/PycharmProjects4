@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>upd_judgment</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'admin/css/base.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}"/>
+     <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+	{{ formset.media }}
+	<script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
+    <script type="text/javascript" src="{% static 'admin/js/admin/RelatedObjectLookups.js' %}"></script>
+</head>
+<body>
+{% block content %}
+Judgment 書類選考</br>
+<form method="post">
+	{% csrf_token %}
+	<table>
+		<tr>
+			<td>
+				a{{ formset.judgment_index }} {{ formset.judgment_index }}b
+			</td>
+		</tr>
+		<tr>
+			<td>
+				c
+				{% for field in formset %}
+					{% if field.judgment_index %}
+						{{ field.judgment_index.label }}
+						{{ field.judgment_index }}
+					{% endif %}
+				{% endfor %}
+				d
+			</td>
+		</tr>
+	</table>
+	<table>
+		{{ formset.as_table }}
+	<table>
+	{{ formset.management_form }}
+	<button type="submit" class="btn btn-primary">登録</button>
+</form>
+{% endblock%}
+
+</body>
+</html>

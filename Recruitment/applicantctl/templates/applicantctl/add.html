@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<form method="post">
+	{% csrf_token %}
+	<table>
+		{{ formset.as_table }}
+	</table>
+	{{ formset.management_form }}
+	<button type="submit" class="btn btn-primary">登録</button>
+</form>
+{% endblock%}
