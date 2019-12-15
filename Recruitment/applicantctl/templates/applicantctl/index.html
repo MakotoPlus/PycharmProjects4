@@ -1,51 +1,53 @@
 {% extends "base.html" %}
- 
 {% block content %}
-{{ message }}
+<div class="container-fluid">
+    {% if user.is_authenticated %}
+	<ul>
+		<li>
+			<a href="{% url 'applicantctl:add' %}" > 応募者追加</a>
+		</li>
+	</ul>
+    {% endif %}
+</div>
 
-<form action ={% url 'applicantctl:index' %} method="POST" >
-</form>
-<form action="" method="POST" >
-		<table>
-			<tr>
-			{% for field in forms %}
-					<td>
-			{{ field.m_appl_route.label }}{{field.m_appl_route}}
-			{{ field.m_work_history.label }}{{field.m_work_history}}
-					</td>
-			{% endfor %}
-					<td>
-					<input type="submit" value="検索">
-					</td>
-			</tr>
-        </table>
-		{% csrf_token %}
-		{{ forms.management_form }}
-</form>
-       	<table>
-			</td>
+<form action ={% url 'applicantctl:index' %} method="GET" ></form>
+<form action="" method="GET" >
+	<table>
+		<tr>
+		{% for field in forms %}
+				<td>
+		{{ field.m_appl_route.label }}{{field.m_appl_route}}
+		{{ field.m_work_history.label }}{{field.m_work_history}}
+				</td>
+		{% endfor %}
+				<td>
+				<input type="submit" value="検索">
+				</td>
 		</tr>
-	</table>
-</br>
-<table border="1">
-      <thead>
-        <tr>
+    </table>
+	{% csrf_token %}
+	{{ forms.management_form }}
+</form>
+
+<div class="container-fluid">
+	<table class="table  table-hover col-sm-12" >
+		<thead>
           <th>No</th>
           <th>応募日</th>
-          <th>応募者№</th>
+          <th>応募者No.</th>
           <th>応募者名</th>
           <th>経歴</th>
           <th>応募経路</th>
           <th>第1優先部</th>
-          <th>第1優先部判定</th>
+          <th>判定</th>
           <th>第2優先部</th>
-          <th>第2優先部判定</th>
+          <th>判定</th>
           <th>第3優先部</th>
-          <th>第3優先部判定</th>
+          <th>判定</th>
           <th>設定</th>
         </tr>
-      </thead>
-      <tbody>
+		</thead>
+		<tbody>
         {% for record in list %}
           <tr>
 	        {% for column in record|slice:":12" %}
@@ -87,9 +89,48 @@
 	        {% endfor %}
 	        </td>
           </tr>
-          
         {% endfor %}
-      </tbody>
-    </table>
-{% endblock %}
+		</tbody>
+	</table>
+</div>
+
+</br>
+
+{% load custom_tags %}
+<div class="container">
+	<div class="row">
+		 <div class="col-sm"></div>
+		 <div class="col-sm justify-content-around">
+			<ul class="pagination">
+			    <!-- 前へ の部分 -->
+			    {% if page_obj.has_previous %}
+			        <li class="page-item">
+			            <a class="page-link" href="?{% query_string request page_obj.previous_page_number %}">
+			                <span aria-hidden="true">&laquo;</span>
+			            </a>
+			        </li>
+			    {% endif %}
+
+			    <!-- 数字の部分 -->
+			    {% for num in page_obj.paginator.page_range %}
+			        {% if page_obj.number == num %}
+			            <li class="page-item active"><a class="page-link" href="#!">{{ num }}</a></li>
+			        {% else %}
+			            <li class="page-item"><a class="page-link" href="?{%  query_string request num %}">{{ num }}</a></li>
+			        {% endif %}
+			    {% endfor %}
+
+			    <!-- 次へ の部分 -->
+			    {% if page_obj.has_next %}
+			        <li class="page-item">
+			            <a class="page-link" href="?{% query_string request page_obj.next_page_number %}">
+			                <span aria-hidden="true">&raquo;</span>
+			            </a>
+			        </li>
+			    {% endif %}
+			</ul>		</div>
+		<div class="col-sm"></div>
+	</div>
+</div>
+{% endblock%}
 

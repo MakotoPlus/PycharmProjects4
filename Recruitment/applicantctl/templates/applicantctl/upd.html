@@ -1,18 +1,4 @@
-{% extends "base.html" %}
-{% load static %}
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-	<meta charset="UTF-8">
-	<title>Title</title>
-	<link rel="stylesheet" type="text/css" href="{% static 'admin/css/base.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}"/>
-     <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
-	{{ formset.media }}
-	<script type="text/javascript" src="{% static 'admin/js/core.js' %}"></script>
-    <script type="text/javascript" src="{% static 'admin/js/admin/RelatedObjectLookups.js' %}"></script>
-</head>
-<body>
+{% extends "base_datetimepicker.html" %}
 {% block content %}
 <form name="form" method="post" action="{% url 'applicantctl:upd' key_applicant %}">
 

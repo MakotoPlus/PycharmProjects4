@@ -8,6 +8,7 @@ from .forms import T_Judgment_Form, T_Judgment_CreateFormSet, JudgmentUpd_Form, 
 from .models import T_Applicant_info, M_Appl_Route, M_Work_History, T_Judgment
 from django import forms
 from django.forms import modelformset_factory
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import connection
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -16,29 +17,67 @@ from django.http import HttpResponseRedirect
 @login_required 
 def index(request):
 
-    #workout = code_that_fetches_instance()
-    forms = SearchFormSet(request.POST or None)
-    #print( forms )
+    forms = SearchFormSet(request.GET or None)
+
+    """
+    GETパラメータのキー内容について。
+    ページング処理のパラメータ 'page'
+    検索絞込み条件の'm_work_history','m_appl_route'の情報は
+    'form-0-m_appl_route','form_0-m_work_history'というキー値となっているので
+    存在するかの確認は、完全一致ではなく部分一致で確認する
+    キーが存在した場合は、isValid実施後にSQLのWhere句を生成する。
+    
+    """
 
     whereSql = ''
-    if request.method == 'POST':
-        #form = SearchFormSet(request.POST)
-        #print( 'WHERE=' + str(request ))
-        forms.is_valid()
-        for form in forms:
-            #print(form.as_table())
-            #print( form )
-            if form.cleaned_data.get('m_appl_route'):
-                #print( 'm_appl_route=' + str(type(form.cleaned_data.get('m_appl_route'))))
-                whereSql = ' WHERE M_Appl_Route.key_appl_route =\'' + str(form.cleaned_data.get('m_appl_route').key_appl_route) + '\' '
-            
-            if form.cleaned_data.get('m_work_history'):
-                if whereSql:
-                    whereSql = whereSql + ' AND '
-                else:
-                    whereSql = ' WHERE '
-                whereSql = whereSql + 'M_Work_History.key_history_kbn=\'' + str(form.cleaned_data.get('m_work_history').key_history_kbn) + '\''
-        #print( 'WHERE=[' + whereSql + ']' )
+    
+    #
+    # パラメータに検索条件があるかチェックする
+    # Request.GETからパラメータをリストに保存(lists)
+    # タプルの中にタプルが格納されているので二重ループで、キー名の文字列が含まれているパラメータキーが存在するか
+    # チェックし存在したらフラグをTrueに設定する。
+    # １つあったらそれで十分なのでループを抜ける
+    lists = request.GET.lists()
+    is_m_appl_route_key = False     #検索条件パラメータ存在有無フラグ
+    is_m_work_history_key = False   #検索条件パラメータ存在有無フラグ
+    for tupls in lists:
+        for key in tupls:
+            if 'm_work_history' in key:
+                is_m_work_history_key = True
+                break
+            elif 'm_appl_route' in key:
+                is_m_appl_route_key = True
+                break
+        #どちらかのフラグがTrueとなったら終わり
+        if is_m_appl_route_key or is_m_appl_route_key:
+            break
+
+    #
+    # 1. パラメータに検索条件があったらSQL文のWHERE句を生成する。
+    # 2. 検索パラメータが正常に作成されていない場合は下記エラーとなるため、新規にFormを生成する。
+    #   「マネージメントフォームのデータが見つからないか、改竄されています。」
+    #    これは検索条件なしでページ遷移パラメータが存在している場合に発生する。
+    #
+    if is_m_work_history_key or is_m_appl_route_key:
+        if forms.is_valid() == True:
+            for form in forms:
+                if form.cleaned_data.get('m_appl_route'):
+                    #print( 'm_appl_route=' + str(type(form.cleaned_data.get('m_appl_route'))))
+                    whereSql = ' WHERE M_Appl_Route.key_appl_route =\'' + str(form.cleaned_data.get('m_appl_route').key_appl_route) + '\' '
+                
+                if form.cleaned_data.get('m_work_history'):
+                    if whereSql:
+                        whereSql = whereSql + ' AND '
+                    else:
+                        whereSql = ' WHERE '
+                    whereSql = whereSql + 'M_Work_History.key_history_kbn=\'' + str(form.cleaned_data.get('m_work_history').key_history_kbn) + '\''
+            #print( 'WHERE=[' + whereSql + ']' )
+        else:
+            #ありえないけと念のため
+            forms = SearchFormSet(None)
+    else:
+        forms = SearchFormSet(None)
+
     cursor = connection.cursor()
     sSql = '''
         select 
@@ -105,22 +144,51 @@ def index(request):
                 )
             '''
     sSql = sSql + whereSql
-    sSql = sSql + '''
-                    ORDER BY applicant_date
-                  '''
+    sSql = sSql + ' ORDER BY applicant_date'
 
 
     #print( sSql )
     cursor.execute(sSql)
     rows = cursor.fetchall()
+    page_obj = paginate_queryset( request, rows, 3 )
+
     #print( '-------------------------------------------------------------------' )
     #print( forms )
     context = {
         'forms' : forms,
-        'list' : rows,
+         'list' : page_obj.object_list,
+        'page_obj' : page_obj,
     }
     #print( context );
     return render(request, 'applicantctl/index.html', context)
+
+
+def paginate_queryset(request, queryset, count):
+    """Pageオブジェクトを返す。
+
+    ページングしたい場合に利用してください。
+
+    countは、1ページに表示する件数です。
+    返却するPgaeオブジェクトは、以下のような感じで使えます。::
+
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+        {% endif %}
+
+    また、page_obj.object_list で、count件数分の絞り込まれたquerysetが取得できます。
+
+    """
+    paginator = Paginator(queryset, count)
+    page = request.GET.get('page')
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    return page_obj
+
+
 
 @login_required
 def add(request):

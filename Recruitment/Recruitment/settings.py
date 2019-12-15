@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts.apps.AccountsConfig',
     'applicantctl',
+    'bootstrap_datepicker_plus',
 ]
 
 MIDDLEWARE = [

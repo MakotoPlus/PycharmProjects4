@@ -1,13 +1,24 @@
 from django import forms
 from .models import T_Applicant_info, T_Judgment, M_Appl_Route, M_Work_History
-from django.contrib.admin.widgets import AdminDateWidget
+#DJango用カレンダ
+#from django.contrib.admin.widgets import AdminDateWidget
+
 from django.forms.fields import DateField  
 #from django.forms import extras
+# BootStrap用カレンダ
+import bootstrap_datepicker_plus as datetimepicker
 
 #########################################
 # 応募者登録フォーム
 class T_Applicant_infoForm(forms.ModelForm):
-    #applicant_date=DateField(input_formats='%Y/%m/%d')
+
+    #
+    #追加の場合はこれでOK
+    #date_field = forms.DateField(
+    #    widget=datetimepicker.DatePickerInput(format='%Y/%m/%d',)
+    #    , label='追加日付項目'
+    #)
+
     class Meta:
         model = T_Applicant_info
         fields = ( 
@@ -18,8 +29,16 @@ class T_Applicant_infoForm(forms.ModelForm):
            'key_history_kbn',
             )
         widgets = {
-            'applicant_date':AdminDateWidget(),
+            'applicant_date':datetimepicker.DatePickerInput(
+                format='%Y/%m/%d',
+            ),
+
         }
+        # DJango Adminカレンダー用
+        #widgets = {
+        #    'applicant_date':AdminDateWidget(),
+        #    'date_field':AdminDateWidget(),
+        #}
 #モデルフォームセット
 T_Applicant_infoCreateFormSet = forms.modelformset_factory(
     T_Applicant_info, form=T_Applicant_infoForm, extra=1)

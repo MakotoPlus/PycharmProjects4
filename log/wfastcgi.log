@@ -1,0 +1,16 @@
+2019-12-14 17:41:31.805272: wfastcgi.py will restart when files in C:\PycharmProjects4\ are changed: .*((\.py)|(\.config))$
+2019-12-14 17:41:31.808270: wfastcgi.py 3.0.0 initialized
+2019-12-14 17:41:47.194873: wfastcgi.py will restart when files in C:\PycharmProjects4\ are changed: .*((\.py)|(\.config))$
+2019-12-14 17:41:47.196862: wfastcgi.py 3.0.0 initialized
+2019-12-14 17:41:51.608269: wfastcgi.py will restart when files in C:\PycharmProjects4\ are changed: .*((\.py)|(\.config))$
+2019-12-14 17:41:51.610271: wfastcgi.py 3.0.0 initialized
+2019-12-14 17:42:27.909429: wfastcgi.py will restart when files in C:\PycharmProjects4\ are changed: .*((\.py)|(\.config))$
+2019-12-14 17:42:27.916429: wfastcgi.py 3.0.0 initialized
+2019-12-14 17:42:27.932434: wfastcgi.py will restart when files in C:\PycharmProjects4\ are changed: .*((\.py)|(\.config))$
+2019-12-14 17:42:27.943437: wfastcgi.py 3.0.0 initialized
+2019-12-14 17:43:03.665918: wfastcgi.py exiting because static\web.config has changed, matching .*((\.py)|(\.config))$
+2019-12-14 17:43:03.665918: wfastcgi.py exiting because static\web.config has changed, matching .*((\.py)|(\.config))$
+2019-12-14 17:43:03.666915: wfastcgi.py exiting because static\web.config has changed, matching .*((\.py)|(\.config))$
+2019-12-14 17:43:03.668919: wfastcgi.py exiting because static\web.config has changed, matching .*((\.py)|(\.config))$
+2019-12-14 17:43:03.671919: wfastcgi.py exiting because static\web.config has changed, matching .*((\.py)|(\.config))$
+2019-12-14 17:43:03.678920: Running on_exit tasks
