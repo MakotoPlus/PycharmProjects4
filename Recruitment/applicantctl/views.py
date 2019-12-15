@@ -224,6 +224,7 @@ def upd(request, pk ):
 
 
     if request.method == 'POST' and formset.is_valid():
+        print( 'SAVE!!')
         formset.save()
         return HttpResponseRedirect(reverse('applicantctl:index'))
 

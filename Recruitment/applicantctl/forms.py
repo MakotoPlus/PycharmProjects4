@@ -19,6 +19,11 @@ class T_Applicant_infoForm(forms.ModelForm):
     #    , label='追加日付項目'
     #)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
     class Meta:
         model = T_Applicant_info
         fields = ( 
@@ -51,13 +56,14 @@ T_Applicant_infoUpdateFormSet = forms.modelformset_factory(
 # 応募者検索フォーム
 class SearchForm(forms.Form):
     #応募経路マスタ M_Appl_Route
-    m_appl_route = forms.ModelChoiceField(queryset=M_Appl_Route.objects.all(), label='応募経路', required=False)
+    m_appl_route = forms.ModelChoiceField(queryset=M_Appl_Route.objects.all(), label='応募経路', required=False, )
     #業務経歴マスタM_Work_History
     m_work_history = forms.ModelChoiceField(queryset=M_Work_History.objects.all(), label='業務経歴', required=False )
-    
-    def _init_(self, permission=None, *args, **kwargs ):
-        super(SearchForm, self).__init__(*args,**kwargs)
-        self.fields['m_appl_route'] = 'Tst'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
     
     #def get_m_appl_route(self, permission):
     #    return M_Appl_Route.objects.all()
@@ -69,6 +75,11 @@ SearchFormSet = forms.formset_factory(SearchForm, extra=1)
 #
 #判定テーブルフォーム
 class T_Judgment_Form(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
     class Meta:
         model = T_Judgment
         fields = ( 
@@ -85,6 +96,11 @@ T_Judgment_CreateFormSet = forms.modelformset_factory(
 #
 #書類選考更新フォーム
 class JudgmentUpd_Form(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
     class Meta:
         model = T_Judgment
         fields = ( 
@@ -102,6 +118,11 @@ Judgment_UpdateFormSet = forms.modelformset_factory(
 #
 #書類選考新規登録用のフォーム
 class JudgmentCreate_Form(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
     class Meta:
         model = T_Judgment
         fields = ( 

@@ -1,14 +1,70 @@
 {% extends "base_datetimepicker.html" %}
 {% block content %}
+</br>
 <form name="form" method="post" action="{% url 'applicantctl:upd' key_applicant %}">
-
-	{% csrf_token %}
-	<table>
-		{{ formset.as_table }}
-	</table>
-	{{ formset.management_form }}
-	<input type="button" class="btn btn-primary" OnClick="ButtonClick('1');" value="更新" >
-	<input type="button" class="btn btn-primary" OnClick="ButtonClick('2');" value="削除" >
+		{% csrf_token %}
+	<div class="container">
+		{% for field in formset %}
+			{# キー情報出力  #}
+			{{ field.key_applicant }}
+		<div class="row">
+			<div class="col-md-2">
+				{{ field.applicant_date.label }} 
+			</div>
+			<div class="col-md-3">
+				{{ field.applicant_date }}
+			</div>
+			<div class="col-md-7">
+			</div>
+			<div class="col-md-2">
+				{{ field.key_appl_route.label }} 
+			</div>
+			<div class="col-md-3">
+				{{ field.key_appl_route }}
+			</div>
+			<div class="col-md-7">
+			</div>
+			<div class="col-md-2">
+			{{ field.applicant_no.label }}
+			</div>
+			<div class="col-md-3">
+			{{ field.applicant_no }}
+			</div>
+			<div class="col-md-7">
+			</div>
+			<div class="col-md-2">
+			{{ field.applicant_name_text.label }} 
+			</div>
+			<div class="col-md-3">
+			{{ field.applicant_name_text }}
+			</div>
+			<div class="col-md-7">
+			</div>
+			<div class="col-md-2">
+			{{ field.key_history_kbn.label }} 
+			</div>
+			<div class="col-md-3">
+			{{ field.key_history_kbn }}
+			</div>
+			<div class="col-md-7">
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-md-2">
+			</div>
+			<div class="col-md-3">
+				<input type="button" class="btn btn-primary" OnClick="ButtonClick('1');" value="更新" >
+				<input type="button" class="btn btn-primary" OnClick="ButtonClick('2');" value="削除" >
+			</div>
+			<div class="col-md-7">
+			</div>
+		{% endfor %}
+		</div>
+		{{ formset.management_form }}
+		</br>
+		
+	</div>
 </form>
 <script>
 function ButtonClick(param){
@@ -19,7 +75,6 @@ function ButtonClick(param){
 			document.form.submit();
 		}
 	}else{
-		document.form.action ="{% url 'applicantctl:upd' key_applicant %}";
 		document.form.submit();
 	}
 }

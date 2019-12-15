@@ -1,34 +1,39 @@
 {% extends "base.html" %}
 {% block content %}
+
+
+</br>
 <div class="container-fluid">
     {% if user.is_authenticated %}
-	<ul>
-		<li>
-			<a href="{% url 'applicantctl:add' %}" > 応募者追加</a>
+	<ul class="nav">
+		<li class="nav-item">
+			<a href="{% url 'applicantctl:add' %}" >応募者追加</a>
 		</li>
 	</ul>
     {% endif %}
 </div>
+</br>
 
-<form action ={% url 'applicantctl:index' %} method="GET" ></form>
-<form action="" method="GET" >
-	<table>
-		<tr>
-		{% for field in forms %}
-				<td>
-		{{ field.m_appl_route.label }}{{field.m_appl_route}}
-		{{ field.m_work_history.label }}{{field.m_work_history}}
-				</td>
-		{% endfor %}
-				<td>
-				<input type="submit" value="検索">
-				</td>
-		</tr>
-    </table>
-	{% csrf_token %}
-	{{ forms.management_form }}
-</form>
-
+<div class="container-fluid">
+	<div class="row">
+		<form class="form-inline" action="" method="GET" >
+				{% for field in forms %}
+					<div class="col-md-4">
+					{{ field.m_appl_route.label }}{{field.m_appl_route}}
+					</div>
+					<div class="col-md-4">
+					{{ field.m_work_history.label }}{{field.m_work_history}}
+					</div>
+				{% endfor %}
+				<div class="col-md-4">
+					<input type="submit" value="検索">
+				</div>
+				{% csrf_token %}
+				{{ forms.management_form }}
+		</form>
+	</div>
+</div>
+</br>
 <div class="container-fluid">
 	<table class="table  table-hover col-sm-12" >
 		<thead>
@@ -93,6 +98,7 @@
 		</tbody>
 	</table>
 </div>
+
 
 </br>
 
