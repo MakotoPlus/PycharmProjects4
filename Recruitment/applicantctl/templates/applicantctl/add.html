@@ -1,14 +1,89 @@
 {% extends "base_datetimepicker.html" %}
 {% block content %}
 </br>
-<form method="post">
+
+{% if form.errors %}
+  {{ form.non_field_errors }}
+{% endif %}
+</br>
+
+<form method="post" action="" name="form">
 	{{ form.media }}
 	{% csrf_token %}
-	<table>
-		{{ formset.as_table }}
-	</table>
+	
+	<div class="container">
+
+	{% for field in formset %}
+
+		<div class="row">
+			<div class="col-md-2 mb-3">
+				{{ field.applicant_date.label }} 
+			</div>
+			<div class="col-md-5 mb-3">
+				{{ field.applicant_date.errors }}
+				{{ field.applicant_date }}
+			</div>
+			<div class="col-md-5 mb-3">
+			</div>
+			<div class="col-md-2 mb-3">
+				{{ field.key_appl_route.label }} 
+			</div>
+			<div class="col-md-5 mb-3">
+				{{ field.key_appl_route.errors }}
+				{{ field.key_appl_route }}
+			</div>
+			<div class="col-md-5 mb-3">
+			</div>
+			<div class="col-md-2 mb-3">
+			{{ field.applicant_no.label }}
+			</div>
+			<div class="col-md-5 mb-3">
+			{{ field.applicant_no.errors }}
+			{{ field.applicant_no }}
+			</div>
+			<div class="col-md-5 mb-3">
+			</div>
+			<div class="col-md-2 mb-3">
+			{{ field.applicant_name_text.label }} 
+			</div>
+			<div class="col-md-5 mb-3">
+			{{ field.applicant_name_text.errors }}
+			{{ field.applicant_name_text }}
+			</div>
+			<div class="col-md-5 mb-3">
+			</div>
+			<div class="col-md-2 mb-3">
+			{{ field.key_history_kbn.label }} 
+			</div>
+			<div class="col-md-5 mb-3">
+			{{ field.key_history_kbn.errors }}
+			{{ field.key_history_kbn }}
+			</div>
+			<div class="col-md-5 mb-3">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2 mb-3">
+			</div>
+			<div class="col-md-2">
+				<button type="submit" class="btn btn-block btn-primary">登録</button>
+			</div>
+			<div class="col-md-2">
+				<button type="button" class="btn btn-block btn-primary" OnClick="ButtonClick();">戻る</button>
+			</div>
+			<div class="col-md-6">
+			</div>
+		</div>
+	{% endfor %}
+	</div>
 	{{ formset.management_form }}
-	<button type="submit" class="btn btn-primary">登録</button>
 </form>
+<script>
+function ButtonClick(){
+	document.form.action ="{% url 'applicantctl:index' %}";
+	document.form.submit();
+}
+</script>
+
 {% endblock%}
 

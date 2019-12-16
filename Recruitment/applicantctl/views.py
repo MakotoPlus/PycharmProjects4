@@ -208,6 +208,7 @@ def add(request):
     #
     #formset.fields['appl_route_text'].choices = t_list_1
     #
+    print(formset.is_valid())
     if request.method == 'POST' and formset.is_valid():
         formset.save()
         return HttpResponseRedirect(reverse('applicantctl:index'))

@@ -1,63 +1,81 @@
 {% extends "base_datetimepicker.html" %}
 {% block content %}
 </br>
+{% for field, errors in formset.errors.items %}
+    {% for error in errors %}
+        <p class="alert alert-danger">{{ error }}</p>
+    {% endfor %}
+{% endfor %}</br>
+
 <form name="form" method="post" action="{% url 'applicantctl:upd' key_applicant %}">
 		{% csrf_token %}
 	<div class="container">
 		{% for field in formset %}
-			{# キー情報出力  #}
-			{{ field.key_applicant }}
+			{{ field.non_field_errors }}
 		<div class="row">
-			<div class="col-md-2">
+			<div class="col-md-2 mb-3">
 				{{ field.applicant_date.label }} 
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-5 mb-3">
+				{{ field.applicant_date.errors }}
 				{{ field.applicant_date }}
 			</div>
-			<div class="col-md-7">
+			<div class="col-md-5 mb-3">
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-2 mb-3">
 				{{ field.key_appl_route.label }} 
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-5 mb-3">
+				{{ field.key_appl_route.errors }}
 				{{ field.key_appl_route }}
 			</div>
-			<div class="col-md-7">
+			<div class="col-md-5 mb-3">
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-2 mb-3">
 			{{ field.applicant_no.label }}
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-5 mb-3">
+			{{ field.applicant_no.errors }}
 			{{ field.applicant_no }}
 			</div>
-			<div class="col-md-7">
+			<div class="col-md-5 mb-3">
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-2 mb-3">
 			{{ field.applicant_name_text.label }} 
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-5 mb-3">
+			{{ field.applicant_name_text.errors }}
 			{{ field.applicant_name_text }}
 			</div>
-			<div class="col-md-7">
+			<div class="col-md-5 mb-3">
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-2 mb-3">
 			{{ field.key_history_kbn.label }} 
 			</div>
-			<div class="col-md-3">
+			<div class="col-md-5 mb-3">
+			{{ field.key_history_kbn.errors }}
 			{{ field.key_history_kbn }}
 			</div>
-			<div class="col-md-7">
+			<div class="col-md-5 mb-3">
 			</div>
 		</div>
 		</br>
+
+			{# キー情報出力(HIDDEN項目の出力) #}
+			{% for hidden_field in field.hidden_fields %}
+				{{ hidden_field }}
+			{% endfor %}
+
 		<div class="row">
 			<div class="col-md-2">
 			</div>
-			<div class="col-md-3">
-				<input type="button" class="btn btn-primary" OnClick="ButtonClick('1');" value="更新" >
-				<input type="button" class="btn btn-primary" OnClick="ButtonClick('2');" value="削除" >
+			<div class="col-md-2">
+				<input type="button" class="btn btn-block btn-primary" OnClick="ButtonClick('1');" value="更新" >
 			</div>
-			<div class="col-md-7">
+			<div class="col-md-2">
+				<input type="button" class="btn btn-block btn-primary" OnClick="ButtonClick('2');" value="削除" >
+			</div>
+			<div class="col-md-6">
 			</div>
 		{% endfor %}
 		</div>
@@ -66,6 +84,7 @@
 		
 	</div>
 </form>
+
 <script>
 function ButtonClick(param){
 	if (param == '2' ){
