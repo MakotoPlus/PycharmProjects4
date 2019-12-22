@@ -12,11 +12,18 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import connection
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
+from .util.logger import logger
+import logging
+
+
+log = logging.getLogger(__name__)
 
 # Create your views here.
 @login_required 
+@logger(func_name="index")
 def index(request):
 
+    log.info('index start')
     forms = SearchFormSet(request.GET or None)
 
     """
@@ -148,6 +155,7 @@ def index(request):
 
 
     #print( sSql )
+    log.info('SQL=' + sSql.replace('\r\n', '').replace('\n', '').replace('  ', ' '))
     cursor.execute(sSql)
     rows = cursor.fetchall()
     page_obj = paginate_queryset( request, rows, 3 )

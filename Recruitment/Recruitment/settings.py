@@ -145,4 +145,78 @@ LOGIN_REDIRECT_URL ='/applicantctl/'
 #日付フォーマット
 DATE_INPUT_FORMATS = ('%Y/%m/%d','%Y-%m-%d')
 
-
+# ログ設定
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    # 出力形式を指定できる。下記のhandlersの設定に渡して使う。
+    'formatters': {
+        'verbose': {
+            'format': '[{levelname}] [{asctime}] [{module}] [{process:d}] [{thread:d}] [{message}]',
+            'style': '{',
+        },
+        'simple': {
+            'format': '[{levelname}][{module}][{message}]',
+            'style': '{',
+        },
+    },
+    #  どこに出力するなどが設定できる。下記のrootやloggers設定に渡して使う。
+    'handlers': {
+        # ↓これは、DEBUGレベルでStreamHandler(標準出力)に、verboseフォーマッタの形式で出力するという意味
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        #'mail_admins': {
+        #    'level': 'ERROR',
+        #    'filters': ['require_debug_false'],
+        #    'class': 'django.utils.log.AdminEmailHandler'
+        #},
+        #'file_images_importer': {
+        #    'level': 'DEBUG',
+        #    'class': 'logging.FileHandler',
+        #    'filename': 'C:\PycharmProjects4\log\Django_debug.log',
+        #    'formatter': 'verbose',
+        #},
+        'file_django_log': {
+            'level': 'INFO',
+            #'class': 'logging.FileHandler',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'C:\PycharmProjects4\log\Django_info.log',
+            'formatter': 'verbose',
+            'when':'D',
+            'interval':1,
+        },
+        'file_django_debug_log': {
+            'level': 'DEBUG',
+            #'class': 'logging.FileHandler',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'C:\PycharmProjects4\log\Django_debug.log',
+            'formatter': 'verbose',
+            'when':'D',
+            'interval':1,
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file_django_log','file_django_debug_log'],  # ハンドラは複数渡せる。
+        'level': 'DEBUG',
+        'propagate': True,
+    },
+    #'loggers': {
+    #    'django': {
+    #        'handlers': ['file_django_log'],
+    #        'level': 'DEBUG',
+    #        'propagate': True,
+    #    },
+    #},
+    
+}
