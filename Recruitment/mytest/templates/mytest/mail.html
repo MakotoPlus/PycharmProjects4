@@ -1,0 +1,26 @@
+<html>
+<head>
+</head>
+<body>
+
+<h1>mytest/mail.html</h1>
+	
+{% if form.errors %}
+  {{ form.non_field_errors }}
+{% endif %}
+
+{{ form.myfield }}
+{% if form.myfield.errors %}
+  {{ form.myfield.errors }}
+{% endif %}
+
+	<a href="./mail">mailtest</a>
+	<form action="" method="POST" name="mailform">
+	<table>
+	{{ form.as_table }}
+	</table>
+	{% csrf_token %}
+	<button type="submit">Send</button>
+	</form>
+</body>
+</html>

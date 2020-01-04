@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'applicantctl',
     'bootstrap_datepicker_plus',
+    'mytest',
 ]
 
 MIDDLEWARE = [
@@ -220,3 +221,22 @@ LOGGING = {
     #},
     
 }
+
+
+# メール送信設定
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_LOCALTIME = False
+EMAIL_HOST_USER = 'fukupeemail@gmail.com'
+EMAIL_HOST_PASSWORD = 'mag@Probe777'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_SSL_CERTFILE = None
+EMAIL_SSL_KEYFILE = None
+EMAIL_TIMEOUT = None
+DEFAULT_FROM_EMAIL = 'fukupeemail@gmail.com'
+SERVER_EMAIL = 'fukupeemail@gmail.com'
+
+

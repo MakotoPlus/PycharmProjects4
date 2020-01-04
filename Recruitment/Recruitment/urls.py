@@ -21,4 +21,5 @@ urlpatterns = [
     path('applicantctl/', include('applicantctl.urls')),
     path('accounts/', include('accounts.urls')), #追加
     path('accounts/', include('django.contrib.auth.urls')), #追加
+    path('mytest/', include('mytest.urls')), #追加
 ]

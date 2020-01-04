@@ -6,9 +6,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
-	<link href="/static/applicantctl/bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="{% static 'applicantctl/bootstrap-4.3.1-dist/css/bootstrap.min.css' %}" rel="stylesheet">
     <!-- Bootstrap CSS Fotter-->
-    <link href="/static/applicantctl/bootstrap-4.3.1-dist/sticky-footer-navbar.css" rel="stylesheet">
+    <link href="{% static 'applicantctl/bootstrap-4.3.1-dist/sticky-footer-navbar.css' %}" rel="stylesheet">
     <title>applicantctl-django</title>
 	{% block head_meta %}{% endblock %}
 </head>
@@ -41,12 +41,12 @@ html {
 {% block content %}{% endblock %}
 {% block fotter %}
 <footer class="footer mt-auto py-3 text-right">
-    <span class="text-right">Copyright © 2019 M.Fukuda Inc. All Rights Reserved.</span>
+    <span class="text-right">Copyright © 2019 Makoto Inc. All Rights Reserved.</span>
 </footer>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 {% endblock %}
-<script src="/static/applicantctl/bootstrap-4.3.1-dist/js/jquery-3.4.1.min.js"></script>
-<script src="/static/applicantctl/bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'applicantctl/bootstrap-4.3.1-dist/js/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'applicantctl/bootstrap-4.3.1-dist/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>
 
