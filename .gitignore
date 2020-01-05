@@ -1,0 +1,5 @@
+venv/
+log/
+settings.py
+Recruitment/Recruitment/settings.py
+.gitgnore

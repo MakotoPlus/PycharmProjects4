@@ -13,6 +13,6 @@ urlpatterns = [
     path('mail', views.mail, name='mail'),
     # ex: /templatemail
     path('templatemail', views.templatemail, name='templatemail'),
-    # ex: /templatemail_send/1
-    #path('templatemail_send/<int:pk>', views.templatemail_send, name='templatemail_send'),
+    # ex: /download_excel
+    path('download_excel', views.download_excel, name='download_excel'),
 ]
