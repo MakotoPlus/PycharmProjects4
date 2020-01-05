@@ -15,4 +15,9 @@ urlpatterns = [
     path('templatemail', views.templatemail, name='templatemail'),
     # ex: /download_excel
     path('download_excel', views.download_excel, name='download_excel'),
+    # ex: /download_pdf
+    path('download_pdf', views.download_pdf, name='download_pdf'),
+    # ex: /download_excel_for_pdf
+    path('download_excel_for_pdf', views.download_excel_for_pdf, name='download_excel_for_pdf'),
+
 ]

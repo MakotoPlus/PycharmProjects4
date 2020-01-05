@@ -1,5 +1,6 @@
 venv/
 log/
+strage/
 settings.py
 Recruitment/Recruitment/settings.py
 .gitgnore

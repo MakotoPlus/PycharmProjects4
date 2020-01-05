@@ -8,9 +8,10 @@ from .forms import MailSendForm, TemplateMailSendForm
 from django.core.mail import send_mail, EmailMessage
 from django.template.loader import render_to_string
 from .util.logger import logger
-#import win32com.client
-#import pythoncom
-#import io
+import win32com.client
+import pythoncom
+import io
+import os
 import urllib
 
 import logging
@@ -74,7 +75,7 @@ def templatemail(request):
         message = render_to_string(mail_template_file, context )
         from_email = settings.DEFAULT_FROM_EMAIL  # 送信者
         recipient_list = ["test@test.co.jp"]  # 宛先リスト
-        
+
         # メール送信実行
         send_mail(subject, message, from_email, recipient_list)
         log.info('mail send success')
@@ -101,7 +102,7 @@ def download_excel(request):
         # ファイルをバイナリモードでオープンし読込
         cnt = cnt + 1
         log.info('download_excel FileRead point %d' % cnt )
-        buffer = open('C:/PycharmProjects4/strage/00.Python勉強.xlsx', mode='rb').read()
+        buffer = open('C:/PycharmProjects4/strage/最新営業状況.xlsx', mode='rb').read()
         log.info('download_excel HttpResponse作成 point %d' % cnt )
         cnt = cnt + 1
         # レスポンスオブジェクト生成
@@ -109,7 +110,7 @@ def download_excel(request):
         cnt = cnt + 1
         # ダウンロードファイル名設定
         log.info('download_excel ファイル名設定 point %d' % cnt )
-        response['Content-Disposition'] = 'attachment; filename="{fn}"'.format(fn=urllib.parse.quote("00.Python勉強.xlsx"))
+        response['Content-Disposition'] = 'attachment; filename="{fn}"'.format(fn=urllib.parse.quote("最新営業状況.xlsx"))
         cnt = cnt + 1
         log.info('download_excel Return point %d' % cnt )
     except Exception as e:
@@ -123,4 +124,110 @@ def download_excel(request):
         return response
     finally:
         log.info('download_excel end')
+
+#
+# PDF ファイルのダウンロード
+def download_pdf(request):
+    log.info('download_pdf start')
+    cnt = 0
+    cnt = cnt + 1
+    log.info('download_pdf point %d' % cnt )
+    try:
+        # ファイルをバイナリモードでオープンし読込
+        cnt = cnt + 1
+        log.info('download_pdf FileRead point %d' % cnt )
+        buffer = open('C:/PycharmProjects4/strage/Test_EDC.pdf', mode='rb').read()
+        log.info('download_pdf HttpResponse作成 point %d' % cnt )
+        cnt = cnt + 1
+        # レスポンスオブジェクト生成
+        response = HttpResponse(buffer, content_type='application/pdf')  # PDFファイルを表す
+        cnt = cnt + 1
+        # ダウンロードファイル名設定
+        log.info('download_pdf ファイル名設定 point %d' % cnt )
+        response['Content-Disposition'] = 'attachment; filename="{fn}"'.format(fn=urllib.parse.quote("Test_EDC.pdf"))
+        cnt = cnt + 1
+        log.info('download_pdf Return point %d' % cnt )
+    except Exception as e:
+        print(dir(e))
+        log.info(e)
+        log.info('失敗')
+        raise
+    else:
+        # 正常の場合レスポンスオブジェクトを返す
+        log.info('成功')
+        return response
+    finally:
+        log.info('download_pdf end')
+
+#
+# Excel For PDF ファイルのダウンロード
+def download_excel_for_pdf(request):
+    method_name ='download_excel_for_pdf '
+    pythoncom.CoInitialize()  # Excelを起動する前にこれを呼び出す
+    excel = win32com.client.Dispatch("Excel.Application")
+    log.info(method_name + 'start')
+    cnt = 0
+    cnt = cnt + 1
+    log.info('%s point %d' % ( method_name, cnt ))
+    cnt = cnt + 1
+    log.info('%s point %d' % ( method_name, cnt ))
+    excel.Visible = False
+    excel.DisplayAlerts = False
+    cnt = cnt + 1
+    log.info('%s point %d' % ( method_name, cnt ))
+
+    #ExcelFileName = 'C:/PycharmProjects4/strage/最新営業状況.xlsx'
+    ExcelFileName = 'C:/PycharmProjects4/strage/（A2機密）SAMPLE_ABC製薬株式会社様(ABC111の使用成績調査)_EDC.xlsx'
+    
+    try:
+        wb = excel.Workbooks.Open(ExcelFileName)
+        
+        #不要のシートを削除
+        #sheets = ('【速報】稼働人数','12月スクランブル', '訪問管理','BP800戦略_定例会日程','Sample_コミュニケーション',)
+        sheets = ('使用方法','FZ原価（解析）', '平成30年料金表（解析）','入力シート','原価_MW','入力シート (2)','原価（安全性）','Sheet1',)
+        cnt = cnt + 1
+        log.info('%s Sheet Delete point %d' % ( method_name, cnt ))
+        for sheet in sheets:
+            log.info('%s Sheet [%s] Delete point %d' % ( method_name, sheet, cnt ))
+            #wb.WorkSheets(sheet).Activate()
+            log.info('%s Sheet [%s] Delete point %d' % ( method_name, sheet, cnt ))
+            wb.WorkSheets(sheet).Delete()
+
+        cnt = cnt + 1
+        log.info('%s Sheet IsFileCheck PDF point %d' % ( method_name, cnt ))
+        if os.path.isfile('C:/PycharmProjects4/strage/Test_EDC_2.pdf'):
+            #ファイル削除
+            log.info('%s Sheet PDF Remove point %d' % ( method_name, cnt ))
+            os.remove('C:/PycharmProjects4/strage/Test_EDC_2.pdf')
+
+        cnt = cnt + 1
+        log.info('%s Sheet PDF Export point %d' % ( method_name, cnt ))
+        wb.ExportAsFixedFormat(0, 'C:/PycharmProjects4/strage/Test_EDC_2.pdf' )
+        cnt = cnt + 1
+        log.info('%s FileRead point %d' % ( method_name, cnt ))
+        buffer = open('C:/PycharmProjects4/strage/Test_EDC_2.pdf', mode='rb').read()
+        # レスポンスオブジェクト生成
+        response = HttpResponse(buffer, content_type='application/pdf')  # PDFファイルを表す
+        cnt = cnt + 1
+        # ダウンロードファイル名設定
+        log.info('%s ファイル名設定 point %d' % ( method_name, cnt ))
+        response['Content-Disposition'] = 'attachment; filename="{fn}"'.format(fn=urllib.parse.quote("Test_EDC_2.pdf"))
+        cnt = cnt + 1
+    except Exception as e:
+        print( e, 'error occurred')
+        log.error( e )
+        log.info('失敗')
+    else:
+        log.info('成功')
+        return response
+    finally:
+        log.info('%s Close point %d' % ( method_name, cnt ))
+        wb.Close(False)
+        #excel.Workbooks(ExcelFileName).Close(SaveChanges=0)
+        log.info('%s Quit point %d' % ( method_name, cnt ))
+        excel.Quit()
+        log.info('%s CoUninitialize point %d' % ( method_name, cnt ))
+        pythoncom.CoUninitialize()  # Excelを終了した後はこれを呼び出す
+        log.info(method_name + 'end')
+
 
