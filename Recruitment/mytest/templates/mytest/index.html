@@ -5,11 +5,15 @@
 
 <h1>mytest/index.html</h1>
 	
+	{% if msg %}
+		<h2>メッセージ:{{ msg }}</h2></br>
+	{% endif %}
 	<a href="./mail">mailtest</a></br>
 	<a href="./templatemail">templatemail</a></br>
 	<a href="./download_excel">Excel File Download</a></br>
 	<a href="./download_pdf">PDf File Download</a></br>
-	<a href="./download_excel_for_pdf">Excel for Pdf Download</a></br>
+	<a href="./download_excel_for_pdf">Download Excel for Pdf</a></br>
+	<a href="./thread_excel_for_pdf">Thread Excel for Pdf</a></br>
 
 </body>
 </html>

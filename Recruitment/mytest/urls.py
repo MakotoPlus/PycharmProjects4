@@ -19,5 +19,7 @@ urlpatterns = [
     path('download_pdf', views.download_pdf, name='download_pdf'),
     # ex: /download_excel_for_pdf
     path('download_excel_for_pdf', views.download_excel_for_pdf, name='download_excel_for_pdf'),
+    # ex: /thread_excel_for_pdf
+    path('thread_excel_for_pdf', views.thread_excel_for_pdf, name='thread_excel_for_pdf'),
 
 ]

@@ -13,7 +13,7 @@ import pythoncom
 import io
 import os
 import urllib
-
+import threading
 import logging
 
 log = logging.getLogger(__name__)
@@ -231,3 +231,74 @@ def download_excel_for_pdf(request):
         log.info(method_name + 'end')
 
 
+#
+# Excel For PDF ファイルの実行Thread
+def thread_excel_for_pdf(request):
+    method_name ='thread_excel_for_pdf '
+    log.info(method_name + 'start')
+    cnt = 0
+    cnt = cnt + 1
+
+    #ExcelFileName = 'C:/PycharmProjects4/strage/最新営業状況.xlsx'
+    ExcelFileName = 'C:/PycharmProjects4/strage/（A2機密）SAMPLE_ABC製薬株式会社様(ABC111の使用成績調査)_EDC.xlsx'
+    
+    class ThreadExcelPdf(threading.Thread):
+        excelFiename = 'C:/PycharmProjects4/strage/（A2機密）SAMPLE_ABC製薬株式会社様(ABC111の使用成績調査)_EDC.xlsx'
+        #不要のシートを削除
+        #sheets = ('【速報】稼働人数','12月スクランブル', '訪問管理','BP800戦略_定例会日程','Sample_コミュニケーション',)
+        sheets = ('使用方法','FZ原価（解析）', '平成30年料金表（解析）','入力シート','原価_MW','入力シート (2)','原価（安全性）','Sheet1',)
+        def __init__(self, *args, **kwds):
+            super().__init__(*args, **kwds)
+            #self.excel_fiename = kwds['excel_fiename']
+        def run(self):
+            cnt = 0
+            try:
+                log.info('%s point %d' % ( method_name, cnt ))
+                cnt = cnt + 1
+                pythoncom.CoInitialize()  # Excelを起動する前にこれを呼び出す
+                log.info('%s point %d' % ( method_name, cnt ))
+                excel = win32com.client.Dispatch("Excel.Application")
+                excel.Visible = False
+                excel.DisplayAlerts = False
+                cnt = cnt + 1
+                log.info('%s point %d' % ( method_name, cnt ))
+                log.info('%s Sheet Delete point %d' % ( method_name, cnt ))
+                wb = excel.Workbooks.Open(ExcelFileName)
+                for sheet in self.sheets:
+                    log.info('%s Sheet [%s] Delete point %d' % ( method_name, sheet, cnt ))
+                    #wb.WorkSheets(sheet).Activate()
+                    log.info('%s Sheet [%s] Delete point %d' % ( method_name, sheet, cnt ))
+                    wb.WorkSheets(sheet).Delete()
+
+                if os.path.isfile('C:/PycharmProjects4/strage/Test_EDC_3.pdf'):
+                    #ファイル削除
+                    log.info('%s Sheet PDF Remove point %d' % ( method_name, cnt ))
+                    os.remove('C:/PycharmProjects4/strage/Test_EDC_3.pdf')
+
+                cnt = cnt + 1
+                log.info('%s Sheet PDF Export point %d' % ( method_name, cnt ))
+                wb.ExportAsFixedFormat(0, 'C:/PycharmProjects4/strage/Test_EDC_3.pdf' )
+                wb.Close(False)
+                #excel.Workbooks(ExcelFileName).Close(SaveChanges=0)
+                log.info('%s Quit point %d' % ( method_name, cnt ))
+                excel.Quit()
+                log.info('%s CoUninitialize point %d' % ( method_name, cnt ))
+            except Exception as e:
+                print( e, 'error occurred')
+                log.error( e )
+                log.info('失敗')
+            else:
+                log.info('成功')
+                #return response
+            finally:
+                pythoncom.CoUninitialize()  # Excelを終了した後はこれを呼び出す
+                log.info(method_name + 'end')
+                log.info('%s Close point %d' % ( method_name, cnt ))
+
+    thread = ThreadExcelPdf()
+    thread.start()
+    context = {
+        'msg' : 'PDF処理実行しました。結果はのちほど'
+    }
+    log.info('index end')
+    return render(request, 'mytest/index.html', context)
