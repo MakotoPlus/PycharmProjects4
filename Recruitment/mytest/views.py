@@ -15,6 +15,7 @@ import os
 import urllib
 import threading
 import logging
+import datetime
 
 log = logging.getLogger(__name__)
 
@@ -177,7 +178,7 @@ def download_excel_for_pdf(request):
     log.info('%s point %d' % ( method_name, cnt ))
 
     #ExcelFileName = 'C:/PycharmProjects4/strage/最新営業状況.xlsx'
-    ExcelFileName = 'C:/PycharmProjects4/strage/（A2機密）SAMPLE_ABC製薬株式会社様(ABC111の使用成績調査)_EDC.xlsx'
+    ExcelFileName = 'C:/PycharmProjects4/strage/SAMPLE_ABC_EDC.xlsx'
     
     try:
         wb = excel.Workbooks.Open(ExcelFileName)
@@ -239,66 +240,111 @@ def thread_excel_for_pdf(request):
     cnt = 0
     cnt = cnt + 1
 
-    #ExcelFileName = 'C:/PycharmProjects4/strage/最新営業状況.xlsx'
-    ExcelFileName = 'C:/PycharmProjects4/strage/（A2機密）SAMPLE_ABC製薬株式会社様(ABC111の使用成績調査)_EDC.xlsx'
-    
+    #########################################################
+    #
+    # クラス：PDF作成スレッド
+    # 概要：指定したExcelファイルを読込、不要シート名を削除して、PDFファイルを作成する
+    #
+    #########################################################
     class ThreadExcelPdf(threading.Thread):
-        excelFiename = 'C:/PycharmProjects4/strage/（A2機密）SAMPLE_ABC製薬株式会社様(ABC111の使用成績調査)_EDC.xlsx'
-        #不要のシートを削除
-        #sheets = ('【速報】稼働人数','12月スクランブル', '訪問管理','BP800戦略_定例会日程','Sample_コミュニケーション',)
-        sheets = ('使用方法','FZ原価（解析）', '平成30年料金表（解析）','入力シート','原価_MW','入力シート (2)','原価（安全性）','Sheet1',)
         def __init__(self, *args, **kwds):
-            super().__init__(*args, **kwds)
-            #self.excel_fiename = kwds['excel_fiename']
+            threading.Thread.__init__( self )
+            self.in_excel_filename = kwds['in_excel_filename']
+            self.out_pdf_filename = kwds['out_pdf_filename']
+            self.output_sheets = kwds['output_sheets']
         def run(self):
-            cnt = 0
             try:
+                cnt = 0
                 log.info('%s point %d' % ( method_name, cnt ))
-                cnt = cnt + 1
-                pythoncom.CoInitialize()  # Excelを起動する前にこれを呼び出す
-                log.info('%s point %d' % ( method_name, cnt ))
+                #########################################################
+                # COMのイニシャライズ(Excelを起動する前にこれを呼び出す)
+                #########################################################
+                pythoncom.CoInitialize()  
                 excel = win32com.client.Dispatch("Excel.Application")
+                #########################################################
+                # Excel非表示設定
+                #########################################################
                 excel.Visible = False
                 excel.DisplayAlerts = False
                 cnt = cnt + 1
-                log.info('%s point %d' % ( method_name, cnt ))
-                log.info('%s Sheet Delete point %d' % ( method_name, cnt ))
-                wb = excel.Workbooks.Open(ExcelFileName)
-                for sheet in self.sheets:
-                    log.info('%s Sheet [%s] Delete point %d' % ( method_name, sheet, cnt ))
-                    #wb.WorkSheets(sheet).Activate()
-                    log.info('%s Sheet [%s] Delete point %d' % ( method_name, sheet, cnt ))
-                    wb.WorkSheets(sheet).Delete()
+                log.info('%s OpenExcelFile[%s] point %d' % ( method_name, self.in_excel_filename, cnt ))
+                wb = excel.Workbooks.Open(self.in_excel_filename)
+                cnt = cnt + 1
+                log.info('%s Sheet Count[%d] point %d' % ( method_name, wb.Worksheets.Count, cnt ))
+                #########################################################
+                # シート名がPDF対象シート名か判断し、対象外の場合は一時削除用リストに格納する
+                # 削除用リストに存在するシートは削除すると・・数式が壊れるので、非表示にして
+                # PDF出力を行う！
+                #########################################################
+                list_delsheets = []
+                if wb.Worksheets.Count > 0:
+                    for index in range(1, wb.Worksheets.Count+1):
+                        log.info( 'WORKSHEET=[' + wb.Worksheets(index).name + ']' )
+                        #ワークシートが出力対象のシートか確認し対象でない場合は削除用リストへシート名追加
+                        if False == (wb.Worksheets(index).name in self.output_sheets):
+                            list_delsheets.append(wb.Worksheets(index).name)
+                    # list_delsheets内にあるシートを全て非表示にする
+                    for delsheet in list_delsheets:
+                        log.info( 'WORKSHEET=[' + delsheet + '] Set Visible=False' )
+                        #wb.WorkSheets(delsheet).Delete()
+                        wb.WorkSheets(delsheet).Visible = False
 
-                if os.path.isfile('C:/PycharmProjects4/strage/Test_EDC_3.pdf'):
+                #########################################################
+                # 出力ファイル名が存在したら削除
+                #########################################################
+                if os.path.isfile(self.out_pdf_filename):
                     #ファイル削除
-                    log.info('%s Sheet PDF Remove point %d' % ( method_name, cnt ))
-                    os.remove('C:/PycharmProjects4/strage/Test_EDC_3.pdf')
+                    log.info('%s File Remove[%s] point %d' % ( method_name, self.out_pdf_filename, cnt ))
+                    os.remove(self.out_pdf_filename)
 
                 cnt = cnt + 1
                 log.info('%s Sheet PDF Export point %d' % ( method_name, cnt ))
-                wb.ExportAsFixedFormat(0, 'C:/PycharmProjects4/strage/Test_EDC_3.pdf' )
+                #########################################################
+                # PDF出力
+                #########################################################
+                wb.ExportAsFixedFormat(0, self.out_pdf_filename )
+                #########################################################
+                # Excelクローズ処理
+                #########################################################
                 wb.Close(False)
-                #excel.Workbooks(ExcelFileName).Close(SaveChanges=0)
+                cnt = cnt + 1
                 log.info('%s Quit point %d' % ( method_name, cnt ))
                 excel.Quit()
-                log.info('%s CoUninitialize point %d' % ( method_name, cnt ))
             except Exception as e:
-                print( e, 'error occurred')
+                print( e, 'error!!')
                 log.error( e )
                 log.info('失敗')
-            else:
-                log.info('成功')
-                #return response
+            #else:
+            #    log.info('成功')
+            #    #return response
             finally:
+                log.info('%s CoUninitialize point %d' % ( method_name, cnt ))
                 pythoncom.CoUninitialize()  # Excelを終了した後はこれを呼び出す
-                log.info(method_name + 'end')
-                log.info('%s Close point %d' % ( method_name, cnt ))
+                log.info('%s Thread End' % ( method_name ))
 
-    thread = ThreadExcelPdf()
+    #########################################################
+    #スレッドパラメータ作成
+    #########################################################
+    # Input ExcelFile名
+    in_excel_filename='C:/PycharmProjects4/strage/SAMPLE_ABC_EDC.xlsx'
+    # Output PdfFile名
+    out_pdf_filename='C:/PycharmProjects4/strage/SAMPLE_ABC_EDC.pdf'
+    #PDF化シート名
+    output_sheets = ('総合表紙（SP用）','表紙（Pモニ）','内訳（Pモニ）','前提（Pモニ）','表紙（契約）','内訳（契約）','前提（契約）','表紙（登録DM）','内訳（登録DM)',
+                '前提（登録DM)','表紙（解析）','前提（解析）','表紙（MW)','内訳（MW)','表紙(安全性)',)
+    
+    
+    #########################################################
+    #スレッド起動
+    #########################################################
+    thread = ThreadExcelPdf(in_excel_filename=in_excel_filename, 
+                            out_pdf_filename=out_pdf_filename,
+                            output_sheets=output_sheets
+                            )
     thread.start()
+    now = datetime.datetime.now()
     context = {
-        'msg' : 'PDF処理実行しました。結果はのちほど'
+        'msg' : 'PDF処理実行しました。結果はのちほど(' + str(now) + ')'
     }
     log.info('index end')
     return render(request, 'mytest/index.html', context)
