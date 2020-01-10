@@ -15,23 +15,25 @@
 </br>
 
 <div class="container-fluid">
-	<div class="row">
-		<form class="form-inline" action="" method="GET" >
-				{% for field in forms %}
-					<div class="col-md-4">
-					{{ field.m_appl_route.label }}{{field.m_appl_route}}
-					</div>
-					<div class="col-md-4">
-					{{ field.m_work_history.label }}{{field.m_work_history}}
-					</div>
-				{% endfor %}
-				<div class="col-md-4">
-					<input type="submit" value="検索">
-				</div>
-				{% csrf_token %}
-				{{ forms.management_form }}
-		</form>
-	</div>
+	<form class="form" action="" method="GET" >
+		<div class="form-row">
+			{% for field in forms %}
+			<div class="col-sm-3">
+			{{ field.m_appl_route.label }}
+			{{field.m_appl_route}}
+			</div>
+			<div class="col-sm-3">
+			{{ field.m_work_history.label }}
+			{{field.m_work_history}}
+			</div>
+			{% endfor %}
+			<div class="col-sm-6 mt-4">
+				<input type="submit" value="検索">
+			</div>
+			{% csrf_token %}
+			{{ forms.management_form }}
+		</div>
+	</form>
 </div>
 </br>
 <div class="container-fluid">

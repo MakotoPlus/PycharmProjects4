@@ -158,7 +158,7 @@ def index(request):
     log.info('SQL=' + sSql.replace('\r\n', '').replace('\n', '').replace('  ', ' '))
     cursor.execute(sSql)
     rows = cursor.fetchall()
-    page_obj = paginate_queryset( request, rows, 3 )
+    page_obj = paginate_queryset( request, rows, 30 )
 
     #print( '-------------------------------------------------------------------' )
     #print( forms )
