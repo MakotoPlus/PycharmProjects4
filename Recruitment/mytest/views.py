@@ -189,10 +189,13 @@ def download_excel_for_pdf(request):
         cnt = cnt + 1
         log.info('%s Sheet Delete point %d' % ( method_name, cnt ))
         for sheet in sheets:
-            log.info('%s Sheet [%s] Delete point %d' % ( method_name, sheet, cnt ))
+            #log.info('%s Sheet [%s] Delete point %d' % ( method_name, sheet, cnt ))
             #wb.WorkSheets(sheet).Activate()
-            log.info('%s Sheet [%s] Delete point %d' % ( method_name, sheet, cnt ))
-            wb.WorkSheets(sheet).Delete()
+            #log.info('%s Sheet [%s] Delete point %d' % ( method_name, sheet, cnt ))
+            #wb.WorkSheets(sheet).Delete()
+            log.info('%s Sheet [%s] Visible:=False point %d' % ( method_name, sheet, cnt ))
+            wb.WorkSheets(sheet).Visible = False
+
 
         cnt = cnt + 1
         log.info('%s Sheet IsFileCheck PDF point %d' % ( method_name, cnt ))
@@ -268,7 +271,7 @@ def thread_excel_for_pdf(request):
                 excel.DisplayAlerts = False
                 cnt = cnt + 1
                 log.info('%s OpenExcelFile[%s] point %d' % ( method_name, self.in_excel_filename, cnt ))
-                wb = excel.Workbooks.Open(self.in_excel_filename)
+                wb = excel.Workbooks.Open(self.in_excel_filename, UpdateLinks=0, ReadOnly=True)
                 cnt = cnt + 1
                 log.info('%s Sheet Count[%d] point %d' % ( method_name, wb.Worksheets.Count, cnt ))
                 #########################################################
@@ -290,19 +293,32 @@ def thread_excel_for_pdf(request):
                         wb.WorkSheets(delsheet).Visible = False
 
                 #########################################################
-                # 出力ファイル名が存在したら削除
+                # 出力ファイル名が存在したらファイル名を変更する
+                #
                 #########################################################
-                if os.path.isfile(self.out_pdf_filename):
-                    #ファイル削除
-                    log.info('%s File Remove[%s] point %d' % ( method_name, self.out_pdf_filename, cnt ))
-                    os.remove(self.out_pdf_filename)
+                out_file = self.out_pdf_filename
+                plex = 0
+                while ( False != os.path.isfile( out_file + '.dmy')) :
+                    log.info('%s File Change[%s] point %d' % ( method_name, out_file + '.dmy', cnt ))
+                    plex = plex + 1
+                    out_file =  self.out_pdf_filename + '(' + str(plex) + ')'
+
+                #ダミーファイルを出力
+                with open(out_file + ".dmy", mode='w') as f:
+                    f.write(out_file)
+
+
+                #if os.path.isfile(self.out_pdf_filename):
+                #    #ファイル削除
+                #    log.info('%s File Remove[%s] point %d' % ( method_name, self.out_pdf_filename, cnt ))
+                #    os.remove(self.out_pdf_filename)
 
                 cnt = cnt + 1
                 log.info('%s Sheet PDF Export point %d' % ( method_name, cnt ))
                 #########################################################
                 # PDF出力
                 #########################################################
-                wb.ExportAsFixedFormat(0, self.out_pdf_filename )
+                wb.ExportAsFixedFormat(0, out_file + '.pdf' )
                 #########################################################
                 # Excelクローズ処理
                 #########################################################
@@ -328,7 +344,7 @@ def thread_excel_for_pdf(request):
     # Input ExcelFile名
     in_excel_filename='C:/PycharmProjects4/strage/SAMPLE_ABC_EDC.xlsx'
     # Output PdfFile名
-    out_pdf_filename='C:/PycharmProjects4/strage/SAMPLE_ABC_EDC.pdf'
+    out_pdf_filename='C:/PycharmProjects4/strage/SAMPLE_ABC_EDC'
     #PDF化シート名
     output_sheets = ('総合表紙（SP用）','表紙（Pモニ）','内訳（Pモニ）','前提（Pモニ）','表紙（契約）','内訳（契約）','前提（契約）','表紙（登録DM）','内訳（登録DM)',
                 '前提（登録DM)','表紙（解析）','前提（解析）','表紙（MW)','内訳（MW)','表紙(安全性)',)

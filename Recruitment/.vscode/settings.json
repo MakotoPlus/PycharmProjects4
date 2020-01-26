@@ -1,0 +1,7 @@
+{
+    "python.venvPath": ".\\..\\venv",
+    "python.venvFolders": [
+        ".\\..\\venv"
+    ],
+    "python.pythonPath": "c:\\PycharmProjects4\\venv\\Scripts\\python.exe"
+}

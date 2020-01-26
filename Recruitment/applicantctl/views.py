@@ -28,12 +28,9 @@ def index(request):
 
     """
     GETパラメータのキー内容について。
-    ページング処理のパラメータ 'page'
-    検索絞込み条件の'm_work_history','m_appl_route'の情報は
-    'form-0-m_appl_route','form_0-m_work_history'というキー値となっているので
-    存在するかの確認は、完全一致ではなく部分一致で確認する
-    キーが存在した場合は、isValid実施後にSQLのWhere句を生成する。
-    
+    ページング処理のパラメータは、 'page'
+    検索絞込み条件の'm_work_history','m_appl_route'の
+    情報キーが存在した場合は、is_valid実施後にSQLのWhere句を生成する。
     """
 
     whereSql = ''
@@ -85,7 +82,6 @@ def index(request):
     else:
         forms = SearchFormSet(None)
 
-    cursor = connection.cursor()
     sSql = '''
         select 
             APPL.key_applicant key_applicant
@@ -156,6 +152,7 @@ def index(request):
 
     #print( sSql )
     log.info('SQL=' + sSql.replace('\r\n', '').replace('\n', '').replace('  ', ' '))
+    cursor = connection.cursor()
     cursor.execute(sSql)
     rows = cursor.fetchall()
     page_obj = paginate_queryset( request, rows, 30 )
