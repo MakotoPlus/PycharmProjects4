@@ -77,29 +77,19 @@ class T_Applicant_info(models.Model):
     #経歴区分KEY
     #key_history_kbn = models.IntegerField(null=True,verbose_name='経歴区分')
     key_history_kbn = models.ForeignKey(M_Work_History, null=True, on_delete=models.PROTECT,verbose_name='経歴区分')
-
-    #第1優先部
-    #deparment_1_text = models.CharField(null=True, max_length=100, verbose_name='部')
-    #deparment_1_text = models.ForeignKey(M_Department, null=True, on_delete=models.PROTECT, verbose_name='部')
-    
-    #第1優先部判定
-    #judgment_1 = models.IntegerField(null=True)
-    #第2優先部
-    #deparment_2_text = models.CharField(null=True, max_length=100, verbose_name='部')
-    #deparment_2_text = models.ForeignKey(M_Department, null=True, on_delete=models.PROTECT, verbose_name='部')
-    #第2優先部判定
-    #judgment_2 = models.IntegerField(null=True)
-    #第3優先部
-    #deparment_3_text = models.CharField(null=True, max_length=100, verbose_name='部')
-    #deparment_3_text = models.ForeignKey(M_Department, null=True, on_delete=models.PROTECT, verbose_name='部')
-    #第3優先部判定
-    #judgment_3 = models.IntegerField(null=True)
     #更新者
     u_user = models.CharField(max_length=100, verbose_name='更新者')
     #更新日
-    u_date = models.DateTimeField(verbose_name='更新日時',auto_now=True)
+    #u_date = models.DateTimeField(verbose_name='更新日時',auto_now=True, default=timezone.now)
+    u_date = models.DateTimeField(verbose_name='更新日時', default=timezone.now)
+    
     def __str__(self):
         return self.applicant_name_text
+
+    def save(self, *args, **kwargs):
+        self.u_date = timezone.now()
+        super().save(*args, **kwargs)
+
 
 #判定テーブル
 class T_Judgment(models.Model):

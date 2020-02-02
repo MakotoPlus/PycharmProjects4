@@ -1,5 +1,7 @@
 from django import forms
 from .models import T_Applicant_info, T_Judgment, M_Appl_Route, M_Work_History
+from django.utils import timezone
+
 #DJango用カレンダ
 #from django.contrib.admin.widgets import AdminDateWidget
 
@@ -21,24 +23,36 @@ class T_Applicant_infoForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["u_date"].required = False
+        self.fields["u_date"].required = False
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+        self.fields['u_date'].widget = forms.HiddenInput()
 
     class Meta:
         model = T_Applicant_info
         fields = ( 
             'applicant_date',
-             'key_appl_route',
+            'key_appl_route',
             'applicant_no',
             'applicant_name_text',
-           'key_history_kbn',
-            )
+            'key_history_kbn',
+            'u_date',
+        )
+        error_messages = {
+            'applicant_no' : { 'required': '必須です!'
+            },
+            'applicant_name_text' : { 'required': '必須です!'
+            }
+        }
         widgets = {
             'applicant_date':datetimepicker.DatePickerInput(
                 format='%Y/%m/%d',
             ),
 
         }
+
+
         # DJango Adminカレンダー用
         #widgets = {
         #    'applicant_date':AdminDateWidget(),

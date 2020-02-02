@@ -13,6 +13,8 @@ from django.db import connection
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from .util.logger import logger
+from django.db import transaction
+
 import logging
 
 
@@ -150,8 +152,6 @@ def index(request):
     sSql = sSql + ' ORDER BY applicant_date'
 
 
-    #print( sSql )
-    log.info('SQL=' + sSql.replace('\r\n', '').replace('\n', '').replace('  ', ' '))
     cursor = connection.cursor()
     cursor.execute(sSql)
     rows = cursor.fetchall()
@@ -195,6 +195,7 @@ def paginate_queryset(request, queryset, count):
 
 
 
+@logger(func_name="add")
 @login_required
 def add(request):
     #新規Formしか不要な場合
@@ -218,29 +219,58 @@ def add(request):
         formset.save()
         return HttpResponseRedirect(reverse('applicantctl:index'))
 
+    print('----------------------------')
+    print(formset.errors)
+    print(formset.is_valid())
+    print('----------------------------')
+
     context = {
         'formset' : formset,
     }
     return render(request, 'applicantctl/add.html', context )
 
 
+@logger(func_name="upd")
 @login_required 
+@transaction.atomic
 def upd(request, pk ):
-    formset = T_Applicant_infoUpdateFormSet(request.POST or None, queryset=T_Applicant_info.objects.filter(key_applicant=pk))
 
-
-    if request.method == 'POST' and formset.is_valid():
-        print( 'SAVE!!')
-        formset.save()
-        return HttpResponseRedirect(reverse('applicantctl:index'))
-
+    #楽観ロックなので更新日を設定する
+    record = T_Applicant_info.objects.select_for_update().get(pk=pk)
+    #record_cnt = record.upd_cnt
+    record_u_date = record.u_date
+    #log.debug( "record.upd_cnt=" + str(record.upd_cnt))
+    errmsg = ''
+    if request.method == 'POST':
+        log.debug('POST----------------------------')
+        form = T_Applicant_infoForm(request.POST, instance=record)
+        if form.is_valid():
+            print( 'SAVE!!')
+            #recordの更新バージョンとformの更新バージョンを比較する
+            #log.debug( "form.cleaned_data=[%d]" % form.cleaned_data['upd_cnt'])
+            log.debug( "is valid After form.cleaned_u_data=[%s]" % str(form.cleaned_data['u_date']))
+            #if record_cnt != form.cleaned_data['upd_cnt']:
+            if record_u_date != form.cleaned_data['u_date']:
+                #log.error( "不整合発生!![" +  str(record_cnt) + "][" + str(form.cleaned_data['upd_cnt']) + "]")
+                log.error( "不整合発生!![%s][%s]" %  (str(record_u_date), str(form.cleaned_data['u_date'])))
+                errmsg = '他のユーザが更新された可能性があります。一度画面を戻って再度実行して下さい'
+            else:
+                #更新カウンターインクリメント
+                #form.cleaned_data['upd_cnt']  = form.cleaned_data['upd_cnt'] + 1
+                form.save()
+                return HttpResponseRedirect(reverse('applicantctl:index'))
+    else:
+        log.debug('NOT POST----------------------------')
+        form = T_Applicant_infoForm(instance=record)
     context = {
-        'formset' : formset,
+        'form' : form,
+        'errmsg' : errmsg,
         'key_applicant': pk,
     }
     return render(request, 'applicantctl/upd.html', context )
 #
 # pk = 応募者情報.応募者情報キー
+@logger(func_name="add_judgment")
 @login_required 
 def add_judgment(request, pk ):
 
@@ -289,6 +319,7 @@ def add_judgment(request, pk ):
                 # 応募者情報キーを取得して設定
                 instance.key_applicant = applicant_key
                 instance.save()
+
             return HttpResponseRedirect(reverse('applicantctl:index'))
         else:
             # エラーメッセージ設定
