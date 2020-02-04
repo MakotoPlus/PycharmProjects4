@@ -21,12 +21,22 @@ class T_Applicant_infoForm(forms.ModelForm):
     #    , label='追加日付項目'
     #)
 
+    date_field = forms.DateField(
+        label='追加日付項目',
+        widget=datetimepicker.DatePickerInput(
+            format='%Y/%m',
+            options={
+                'locale':'ja',
+                'viewMode' : 'months'
+            }
+        )
+    )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["u_date"].required = False
-        self.fields["u_date"].required = False
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+        #self.fields["u_date"].required = False
         self.fields['u_date'].widget = forms.HiddenInput()
 
     class Meta:
@@ -48,6 +58,9 @@ class T_Applicant_infoForm(forms.ModelForm):
         widgets = {
             'applicant_date':datetimepicker.DatePickerInput(
                 format='%Y/%m/%d',
+                options={
+                    'locale':'ja',
+                }
             ),
 
         }

@@ -19,53 +19,8 @@
 <form name="form" method="post" action="{% url 'applicantctl:upd' key_applicant %}">
 		{% csrf_token %}
 		<div class="container">
-			<div class="row">
-				<div class="col-md-2 mb-3">
-					{{ form.applicant_date.label }} 
-				</div>
-				<div class="col-md-5 mb-3">
-					{{ form.applicant_date.errors }}
-					{{ form.applicant_date }}
-				</div>
-				<div class="col-md-5 mb-3">
-				</div>
-				<div class="col-md-2 mb-3">
-					{{ form.key_appl_route.label }} 
-				</div>
-				<div class="col-md-5 mb-3">
-					{{ form.key_appl_route.errors }}
-					{{ form.key_appl_route }}
-				</div>
-				<div class="col-md-5 mb-3">
-				</div>
-				<div class="col-md-2 mb-3">
-				{{ form.applicant_no.label }}
-				</div>
-				<div class="col-md-5 mb-3">
-				{{ form.applicant_no.errors }}
-				{{ form.applicant_no }}
-				</div>
-				<div class="col-md-5 mb-3">
-				</div>
-				<div class="col-md-2 mb-3">
-				{{ form.applicant_name_text.label }} 
-				</div>
-				<div class="col-md-5 mb-3">
-				{{ form.applicant_name_text.errors }}
-				{{ form.applicant_name_text }}
-				</div>
-				<div class="col-md-5 mb-3">
-				</div>
-				<div class="col-md-2 mb-3">
-				{{ form.key_history_kbn.label }} 
-				</div>
-				<div class="col-md-5 mb-3">
-				{{ form.key_history_kbn.errors }}
-				{{ form.key_history_kbn }}
-				</div>
-				<div class="col-md-5 mb-3">
-				</div>
-			</div>
+		{{ form.as_p }}	
+		</div>
 			</br>
 	
 				{# キー情報出力(HIDDEN項目の出力) #}
@@ -87,6 +42,15 @@
 		</br>
 	</div>
 </form>
+<script type="text/javascript">
+        $(function () {
+            $('#datetimepicker1').datetimepicker({
+                //viewMode: 'month',
+				//format: 'YYYY/MM'
+            });
+        });
+</script>
+
 </br>
 <script>
 function ButtonClick(param){
