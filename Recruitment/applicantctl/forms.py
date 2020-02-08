@@ -23,6 +23,7 @@ class T_Applicant_infoForm(forms.ModelForm):
 
     date_field = forms.DateField(
         label='追加日付項目',
+        required = False,
         widget=datetimepicker.DatePickerInput(
             format='%Y/%m',
             options={
