@@ -17,15 +17,15 @@ from ..forms import (
     )
 
 import logging
-
-
 log = logging.getLogger(__name__)
+
+@logger(func_name="upd_func")
+@login_required 
+@transaction.atomic
 def upd_func(request, pk):
     #楽観ロックなので更新日を設定する
     record = T_Applicant_info.objects.select_for_update().get(pk=pk)
-    #record_cnt = record.upd_cnt
     record_u_date = record.u_date
-    #log.debug( "record.upd_cnt=" + str(record.upd_cnt))
     errmsg = ''
     if request.method == 'POST':
         log.debug('POST----------------------------')
@@ -33,16 +33,12 @@ def upd_func(request, pk):
         if form.is_valid():
             print( 'SAVE!!')
             #recordの更新バージョンとformの更新バージョンを比較する
-            #log.debug( "form.cleaned_data=[%d]" % form.cleaned_data['upd_cnt'])
             log.debug( "is valid After form.cleaned_u_data=[%s]" % str(form.cleaned_data['u_date']))
-            #if record_cnt != form.cleaned_data['upd_cnt']:
             if record_u_date != form.cleaned_data['u_date']:
-                #log.error( "不整合発生!![" +  str(record_cnt) + "][" + str(form.cleaned_data['upd_cnt']) + "]")
                 log.error( "不整合発生!![%s][%s]" %  (str(record_u_date), str(form.cleaned_data['u_date'])))
                 errmsg = '他のユーザが更新された可能性があります。一度画面を戻って再度実行して下さい'
             else:
                 #更新カウンターインクリメント
-                #form.cleaned_data['upd_cnt']  = form.cleaned_data['upd_cnt'] + 1
                 form.save()
                 return HttpResponseRedirect(reverse('applicantctl:index'))
     else:

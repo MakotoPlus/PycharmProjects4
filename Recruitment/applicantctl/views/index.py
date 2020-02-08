@@ -20,6 +20,10 @@ import logging
 
 
 log = logging.getLogger(__name__)
+
+# Create your views here.
+@login_required 
+@logger(func_name="index_func")
 def index_func(request):
     forms = SearchFormSet(request.GET or None)
 

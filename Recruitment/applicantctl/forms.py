@@ -14,13 +14,7 @@ import bootstrap_datepicker_plus as datetimepicker
 # 応募者登録フォーム
 class T_Applicant_infoForm(forms.ModelForm):
 
-    #
-    #追加の場合はこれでOK
-    #date_field = forms.DateField(
-    #    widget=datetimepicker.DatePickerInput(format='%Y/%m/%d',)
-    #    , label='追加日付項目'
-    #)
-
+    # カレンダー表示テスト用の追加項目
     date_field = forms.DateField(
         label='追加日付項目',
         required = False,
@@ -37,8 +31,10 @@ class T_Applicant_infoForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
-        #self.fields["u_date"].required = False
+        #更新日付項目は非表示、必須項目除外します。
+        #更新、追加タイミングのmodel.saveメソッド時にシステム日付を設定します。
         self.fields['u_date'].widget = forms.HiddenInput()
+        self.fields['u_date'].required = False
 
     class Meta:
         model = T_Applicant_info

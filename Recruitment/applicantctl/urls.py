@@ -1,35 +1,28 @@
 #Recuruitment/applicantctl/urls.py
 from django.urls import include, path
 from django.conf.urls import url
-from . import views
-from .views import ItemUpdateView, ItemDeleteView
+from .views.views import ItemUpdateView, ItemDeleteView
+from .views import index, add, add_judgment, upd
+from .views import add, views
 
 app_name ='applicantctl'
 
 urlpatterns = [
     # ex: /
-    path('', views.index, name='index'),
-    path('list', views.index, name='index'),
-    path('index', views.index, name='index'),
+    path('', index.index_func, name='index'),
+    path('list', index.index_func, name='index'),
+    path('index', index.index_func, name='index'),
 
     # ex: /add/
-    path('add/', views.add, name='add'),
+    path('add/', add.add_func, name='add'),
     #url(r'^create$', T_ApplicantinfoCreateView.as_view()),
-
     # ex: /add/judgment/1/
-    path('add/judgment/<int:pk>/', views.add_judgment, name='add_judgment'),
-
-    # ex: /upd/judgment/1/
-    #path('upd/judgment/<int:pk>/', views.upd_judgment, name='upd_judgment'),
-
+    path('add/judgment/<int:pk>/', add_judgment.add_judgment_func, name='add_judgment'),
     # ex: /upd/1/
-    path('upd/<int:pk>/', views.upd, name='upd'),
- 
+    path('upd/<int:pk>/', upd.upd_func, name='upd'),
     # ex: /delete/1/
-    path('delete/<int:pk>/', ItemDeleteView.as_view(), name='delete'),
- 
+    path('delete/<int:pk>/', ItemDeleteView.as_view(), name='delete'), 
     # ex: /judgment/1/
-    #path('judgment/<int:pk>/', views.judgment, name='judgment'),
     path('upd/judgment/<int:pk>/', ItemUpdateView.as_view(), name='upd_judgment'),
 
 ]

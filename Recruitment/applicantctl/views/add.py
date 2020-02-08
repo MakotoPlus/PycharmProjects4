@@ -17,9 +17,10 @@ from ..forms import (
     )
 
 import logging
-
-
 log = logging.getLogger(__name__)
+
+@logger(func_name="add_func")
+@login_required
 def add_func(request):
     #新規Formしか不要な場合
     formset = T_Applicant_infoCreateFormSet(request.POST or None, queryset=T_Applicant_info.objects.none())

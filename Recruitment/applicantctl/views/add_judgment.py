@@ -16,9 +16,12 @@ from ..forms import (
     )
 
 import logging
-
-
 log = logging.getLogger(__name__)
+
+#
+# pk = 応募者情報.応募者情報キー
+@logger(func_name="add_judgment_func")
+@login_required 
 def add_judgment_func(request, pk):
     # 応募者情報キーを使って判定テーブルにデータが存在するか確認
     #
