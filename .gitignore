@@ -1,12 +1,17 @@
 venv/
 log/
-���\�z/
 work/
 strage/
 settings.py
 Recruitment/Recruitment/settings.py
 Recruitment.code-workspace
 .gitgnore
-Recruitment/applicantctl/templates/applicantctl/upd - コピー.html
+__pycache__/
+*.pyc
+*.log
+web.config
 Recruitment/applicantctl/templates/applicantctl/upd copy.html
 Recruitment/applicantctl/templates/applicantctl/upd.as.html
+���\�z/
+Recruitment/applicantctl/templates/applicantctl/upd - コピー.html
+Recruitment/web.config
