@@ -4,7 +4,7 @@ from django.views.generic import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.db import transaction
 from ..util.logger import logger
-from ..forms import JudgmentUpd_Form
+from ..forms.JudgmentUpd_Form import JudgmentUpd_Form
 from ..models import T_Applicant_info, T_Judgment
 import logging
 log = logging.getLogger(__name__)

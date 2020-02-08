@@ -4,6 +4,7 @@ from django.conf.urls import url
 from .views.views import ItemUpdateView, ItemDeleteView
 from .views import index, add, add_judgment, upd
 from .views import add, views
+from .views.views import ItemDeleteView, ItemUpdateView
 
 app_name ='applicantctl'
 

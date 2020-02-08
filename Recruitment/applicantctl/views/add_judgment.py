@@ -8,12 +8,16 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import connection, transaction
 from django.http import HttpResponseRedirect
 from ..util.logger import logger
-from ..forms import (
-    T_Applicant_infoForm, T_Applicant_infoCreateFormSet, SearchForm, SearchFormSet,
-    T_Judgment_Form, T_Judgment_CreateFormSet, JudgmentUpd_Form, Judgment_UpdateFormSet,
-    T_Applicant_infoUpdateFormSet, JudgmenAdd_CreateFormSet, JudgmentCreate_Form,
-    T_Applicant_info, M_Appl_Route, M_Work_History, T_Judgment
-    )
+from ..forms.JudgmentCreate_Form import JudgmenAdd_CreateFormSet
+from ..forms.T_Judgment_Form import T_Judgment_Form
+from ..models import T_Judgment, T_Applicant_info
+
+#from ..forms import (
+#    T_Applicant_infoForm, T_Applicant_infoCreateFormSet, SearchForm, SearchFormSet,
+#    T_Judgment_Form, T_Judgment_CreateFormSet, JudgmentUpd_Form, Judgment_UpdateFormSet,
+#    T_Applicant_infoUpdateFormSet, JudgmenAdd_CreateFormSet, JudgmentCreate_Form,
+#    T_Applicant_info, M_Appl_Route, M_Work_History, T_Judgment
+#    )
 
 import logging
 log = logging.getLogger(__name__)
