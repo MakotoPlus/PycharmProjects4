@@ -1,10 +1,9 @@
 #Recuruitment/applicantctl/urls.py
 from django.urls import include, path
 from django.conf.urls import url
-from .views.views import ItemUpdateView, ItemDeleteView
 from .views import index, add, add_judgment, upd
-from .views import add, views
-from .views.views import ItemDeleteView, ItemUpdateView
+from .views.ItemDeleteView import ItemDeleteView
+from .views.ItemUpdateView import ItemUpdateView
 
 app_name ='applicantctl'
 
