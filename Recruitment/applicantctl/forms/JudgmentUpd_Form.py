@@ -15,12 +15,13 @@ class JudgmentUpd_Form(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
-
+        self.fields['u_date'].widget = forms.HiddenInput()
     class Meta:
         model = T_Judgment
         fields = ( 
             'judgment',
             'key_judgment',
+            'u_date',
         )
         widgets = {
         }

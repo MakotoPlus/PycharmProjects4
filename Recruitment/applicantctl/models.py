@@ -108,7 +108,15 @@ class T_Judgment(models.Model):
     #更新者
     u_user = models.CharField(max_length=100, verbose_name='更新者')
     #更新日
-    u_date = models.DateTimeField(verbose_name='更新日時',auto_now=True)
+    #u_date = models.DateTimeField(verbose_name='更新日時',auto_now=True)
+    u_date = models.DateTimeField(verbose_name='更新日時', default=timezone.now)
+    #u_date =models.CharField(max_length=100, verbose_name='更新者a')
+
     def __str__(self):
         return str(self.key_judgment)
 
+    def save(self, *args, **kwargs):
+        print( "モデルクラスさよ")
+        self.u_date = timezone.datetime.now()
+        print(self.u_date)
+        super().save(*args, **kwargs)
