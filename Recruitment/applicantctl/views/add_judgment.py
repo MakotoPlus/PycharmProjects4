@@ -13,6 +13,7 @@ from ..forms.T_Judgment_Form import T_Judgment_Form
 from ..models import T_Judgment, T_Applicant_info
 from datetime import datetime, timedelta
 from django.utils import timezone
+from applicantctl.util.original_exception import OriginalException
 
 #from ..forms import (
 #    T_Applicant_infoForm, T_Applicant_infoCreateFormSet, SearchForm, SearchFormSet,
@@ -106,6 +107,8 @@ def add_judgment_func(request, pk):
             # エラーメッセージ設定
             message = '優先順位を重複に設定出来ません'
 
+    #raise OriginalException('OriginalException!!だよ')    
+    
     context = {
         'formset' : formset,
         'message' : message,
