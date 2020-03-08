@@ -11,8 +11,10 @@ def logger(func_name):
             reset_queries()
             #実際のメソッド呼出し
             result = func(*args, **kwargs)
-            #今まで実行していたSQLをログへ出力
-            log.debug(connections['default'].queries)
+            sql_list = connections['default'].queries
+            for sql in sql_list:
+                #今まで実行していたSQLをログへ出力
+                log.debug(sql)
             log.info(func_name + "() 終了")
             return result
         return inner
