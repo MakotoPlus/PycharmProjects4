@@ -4,8 +4,6 @@ venv/
 log/
 work/
 strage/
-settings.py
-Recruitment/Recruitment/settings.py
 Recruitment.code-workspace
 .gitgnore
 __pycache__/
@@ -15,3 +13,5 @@ Recruitment/applicantctl/templates/applicantctl/upd.as.html
 Recruitment/applicantctl/templates/applicantctl/upd - コピー.html
 Recruitment/web.config
 /Recruitment/Recruitment/__pycache__
+Recruitment/develop/
+
