@@ -103,7 +103,7 @@ def download_excel(request):
         # ファイルをバイナリモードでオープンし読込
         cnt = cnt + 1
         log.info('download_excel FileRead point %d' % cnt )
-        buffer = open('C:/PycharmProjects4/strage/最新営業状況.xlsx', mode='rb').read()
+        buffer = open('C:/PycharmProjects4/PycharmProjects4/strage/最新営業状況.xlsx', mode='rb').read()
         log.info('download_excel HttpResponse作成 point %d' % cnt )
         cnt = cnt + 1
         # レスポンスオブジェクト生成
@@ -137,7 +137,7 @@ def download_pdf(request):
         # ファイルをバイナリモードでオープンし読込
         cnt = cnt + 1
         log.info('download_pdf FileRead point %d' % cnt )
-        buffer = open('C:/PycharmProjects4/strage/Test_EDC.pdf', mode='rb').read()
+        buffer = open('C:/PycharmProjects4/PycharmProjects4/strage/Test_EDC.pdf', mode='rb').read()
         log.info('download_pdf HttpResponse作成 point %d' % cnt )
         cnt = cnt + 1
         # レスポンスオブジェクト生成
@@ -177,8 +177,8 @@ def download_excel_for_pdf(request):
     cnt = cnt + 1
     log.info('%s point %d' % ( method_name, cnt ))
 
-    #ExcelFileName = 'C:/PycharmProjects4/strage/最新営業状況.xlsx'
-    ExcelFileName = 'C:/PycharmProjects4/strage/SAMPLE_ABC_EDC.xlsx'
+    #ExcelFileName = 'C:/PycharmProjects4/PycharmProjects4/strage/最新営業状況.xlsx'
+    ExcelFileName = 'C:/PycharmProjects4/PycharmProjects4/strage/SAMPLE_ABC_EDC.xlsx'
     
     try:
         wb = excel.Workbooks.Open(ExcelFileName)
@@ -199,17 +199,17 @@ def download_excel_for_pdf(request):
 
         cnt = cnt + 1
         log.info('%s Sheet IsFileCheck PDF point %d' % ( method_name, cnt ))
-        if os.path.isfile('C:/PycharmProjects4/strage/Test_EDC_2.pdf'):
+        if os.path.isfile('C:/PycharmProjects4/PycharmProjects4/strage/Test_EDC_2.pdf'):
             #ファイル削除
             log.info('%s Sheet PDF Remove point %d' % ( method_name, cnt ))
-            os.remove('C:/PycharmProjects4/strage/Test_EDC_2.pdf')
+            os.remove('C:/PycharmProjects4/PycharmProjects4/strage/Test_EDC_2.pdf')
 
         cnt = cnt + 1
         log.info('%s Sheet PDF Export point %d' % ( method_name, cnt ))
-        wb.ExportAsFixedFormat(0, 'C:/PycharmProjects4/strage/Test_EDC_2.pdf' )
+        wb.ExportAsFixedFormat(0, 'C:/PycharmProjects4/PycharmProjects4/strage/Test_EDC_2.pdf' )
         cnt = cnt + 1
         log.info('%s FileRead point %d' % ( method_name, cnt ))
-        buffer = open('C:/PycharmProjects4/strage/Test_EDC_2.pdf', mode='rb').read()
+        buffer = open('C:/PycharmProjects4/PycharmProjects4/strage/Test_EDC_2.pdf', mode='rb').read()
         # レスポンスオブジェクト生成
         response = HttpResponse(buffer, content_type='application/pdf')  # PDFファイルを表す
         cnt = cnt + 1
@@ -326,6 +326,8 @@ def thread_excel_for_pdf(request):
                 cnt = cnt + 1
                 log.info('%s Quit point %d' % ( method_name, cnt ))
                 excel.Quit()
+                cnt = cnt + 1
+                log.info('Success %s  %d' % ( method_name, cnt ))
             except Exception as e:
                 print( e, 'error!!')
                 log.error( e )
@@ -342,9 +344,9 @@ def thread_excel_for_pdf(request):
     #スレッドパラメータ作成
     #########################################################
     # Input ExcelFile名
-    in_excel_filename='C:/PycharmProjects4/strage/SAMPLE_ABC_EDC.xlsx'
+    in_excel_filename='C:/PycharmProjects4/PycharmProjects4/strage/SAMPLE_ABC_EDC.xlsx'
     # Output PdfFile名
-    out_pdf_filename='C:/PycharmProjects4/strage/SAMPLE_ABC_EDC'
+    out_pdf_filename='C:/PycharmProjects4/PycharmProjects4/strage/SAMPLE_ABC_EDC'
     #PDF化シート名
     output_sheets = ('総合表紙（SP用）','表紙（Pモニ）','内訳（Pモニ）','前提（Pモニ）','表紙（契約）','内訳（契約）','前提（契約）','表紙（登録DM）','内訳（登録DM)',
                 '前提（登録DM)','表紙（解析）','前提（解析）','表紙（MW)','内訳（MW)','表紙(安全性)',)
