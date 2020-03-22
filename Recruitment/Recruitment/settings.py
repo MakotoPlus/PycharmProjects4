@@ -20,13 +20,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2ec4m6#l15m2_lf(ayc=09iu2*xtbi^7h(t4a7q16@&m_hdjxq'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 #ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+#ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'applicantctl',
     'bootstrap_datepicker_plus',
+    'bootstrap4',
     'mytest',
 ]
 
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'applicantctl.middleware.simple_middleware.SimpleMiddleware',
 ]
 
 ROOT_URLCONF = 'Recruitment.urls'
@@ -98,6 +100,7 @@ DATABASES = {
 }
 
 
+
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -120,11 +123,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-# LANGUAGE_CODE = 'en-us'
-LANGUAGE_CODE = 'ja'
+LANGUAGE_CODE = 'en-us'
+#LANGUAGE_CODE = 'ja'
 
-# TIME_ZONE = 'UTC'
-TIME_ZONE = 'Asia/Tokyo'
+TIME_ZONE = 'UTC'
+#TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
@@ -146,98 +149,23 @@ LOGIN_REDIRECT_URL ='/applicantctl/'
 #日付フォーマット
 DATE_INPUT_FORMATS = ('%Y/%m/%d','%Y-%m-%d')
 
-# ログ設定
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
-        },
-        'require_debug_true': {
-            '()': 'django.utils.log.RequireDebugTrue',
-        },
-    },
-    # 出力形式を指定できる。下記のhandlersの設定に渡して使う。
-    'formatters': {
-        'verbose': {
-            'format': '[{levelname}] [{asctime}] [{module}] [{process:d}] [{thread:d}] [{message}]',
-            'style': '{',
-        },
-        'simple': {
-            'format': '[{levelname}][{module}][{message}]',
-            'style': '{',
-        },
-    },
-    #  どこに出力するなどが設定できる。下記のrootやloggers設定に渡して使う。
-    'handlers': {
-        # ↓これは、DEBUGレベルでStreamHandler(標準出力)に、verboseフォーマッタの形式で出力するという意味
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-        },
-        #'mail_admins': {
-        #    'level': 'ERROR',
-        #    'filters': ['require_debug_false'],
-        #    'class': 'django.utils.log.AdminEmailHandler'
-        #},
-        #'file_images_importer': {
-        #    'level': 'DEBUG',
-        #    'class': 'logging.FileHandler',
-        #    'filename': 'C:\PycharmProjects4\log\Django_debug.log',
-        #    'formatter': 'verbose',
-        #},
-        'file_django_log': {
-            'level': 'INFO',
-            #'class': 'logging.FileHandler',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'C:\PycharmProjects4\log\Django_info.log',
-            'formatter': 'verbose',
-            'when':'D',
-            'interval':1,
-        },
-        'file_django_debug_log': {
-            'level': 'DEBUG',
-            #'class': 'logging.FileHandler',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'C:\PycharmProjects4\log\Django_debug.log',
-            'formatter': 'verbose',
-            'when':'D',
-            'interval':1,
-        },
-    },
-    'root': {
-        'handlers': ['console', 'file_django_log','file_django_debug_log'],  # ハンドラは複数渡せる。
-        'level': 'DEBUG',
-        'propagate': True,
-    },
-    #'loggers': {
-    #    'django': {
-    #        'handlers': ['file_django_log'],
-    #        'level': 'DEBUG',
-    #        'propagate': True,
-    #    },
-    #},
-    
-}
-
-
 # メール送信設定
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_LOCALTIME = False
-EMAIL_HOST_USER = 'ホストユーザ名'
-EMAIL_HOST_PASSWORD = 'パスワード'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_SSL_CERTFILE = None
 EMAIL_SSL_KEYFILE = None
 EMAIL_TIMEOUT = None
-DEFAULT_FROM_EMAIL = 'デフォルトメールアド'
-SERVER_EMAIL = 'サーバメーアド'
+DEFAULT_FROM_EMAIL = ''
+SERVER_EMAIL = ''
 
-
-
+try:
+    from develop.development import *
+except ImportError:
+    pass
