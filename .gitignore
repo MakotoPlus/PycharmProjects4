@@ -15,3 +15,9 @@ Recruitment/web.config
 /Recruitment/Recruitment/__pycache__
 Recruitment/develop/
 
+/Recruitment/accounts/__pycache__
+/Recruitment/accounts/migrations/__pycache__
+/Recruitment/applicantctl/__pycache__
+/Recruitment/applicantctl/migrations/__pycache__
+/Recruitment/applicantctl/templatetags/__pycache__
+/Recruitment/mytest/util/__pycache__
