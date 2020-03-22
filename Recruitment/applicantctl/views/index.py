@@ -11,15 +11,31 @@ from django.http import HttpResponseRedirect
 from ..util.logger import logger
 from ..forms.SearchForm import SearchForm, SearchFormSet
 import logging
-
+from applicantctl.util.session_ctl import *
 
 log = logging.getLogger(__name__)
 
 # Create your views here.
+@session_ctl('')
 @login_required 
 @logger(func_name="index_func")
 def index_func(request):
     forms = SearchFormSet(request.GET or None)
+
+
+    #セッション情報の出力
+    print( '残っているセッション情報')
+    keys = request.session.keys()
+    print( keys )
+
+    request.session['KEY_01'] = 'abcdef'
+    request.session['KEY_02'] = 'abcdedddf'
+    request.session['KEY_03'] = 'abcdedddf'
+    request.session['KEY_04'] = 'abcdedddf'
+    request.session['KEY_05'] = 'abcdedddf'
+    request.session['KEY_06'] = 'abcdedddf'
+    #print( 'user=[%s]' % request.user )
+    #print( request.session.items())
 
     """
     GETパラメータのキー内容について。

@@ -26,7 +26,7 @@ SECRET_KEY = ''
 DEBUG = True
 
 #ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -89,10 +89,10 @@ WSGI_APPLICATION = 'Recruitment.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mydb',
-        'USER': 'ユーザ名',
-        'PASSWORD': 'パスワード',
-        'HOST': 'ホスト',
+        'NAME': 'sampledb',
+        'USER': 'fukuda',
+        'PASSWORD': 'fukuda',
+        'HOST': 'localhost',
         'OPTIONS' :{
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
@@ -140,7 +140,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'C:\PycharmProjects4\static'
+STATIC_ROOT = 'C:\PycharmProjects4\PycharmProjects4\static'
 
 # ログイン時のリダイレクトURL
 LOGIN_REDIRECT_URL ='/applicantctl/'
@@ -165,6 +165,81 @@ EMAIL_TIMEOUT = None
 DEFAULT_FROM_EMAIL = ''
 SERVER_EMAIL = ''
 
+# ログ設定
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    # 出力形式を指定できる。下記のhandlersの設定に渡して使う。
+    'formatters': {
+        'verbose': {
+            'format': '[{levelname}] [{asctime}] [{module}] [{process:d}] [{thread:d}] [{message}]',
+            'style': '{',
+        },
+        'simple': {
+            'format': '[{levelname}][{module}] [{process:d}] [{thread:d}] [{message}]',
+            'style': '{',
+        },
+    },
+    #  どこに出力するなどが設定できる。下記のrootやloggers設定に渡して使う。
+    'handlers': {
+        # ↓これは、DEBUGレベルでStreamHandler(標準出力)に、verboseフォーマッタの形式で出力するという意味
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+        #'mail_admins': {
+        #    'level': 'ERROR',
+        #    'filters': ['require_debug_false'],
+        #    'class': 'django.utils.log.AdminEmailHandler'
+        #},
+        #'file_images_importer': {
+        #    'level': 'DEBUG',
+        #    'class': 'logging.FileHandler',
+        #    'filename': 'C:\PycharmProjects4\log\Django_debug.log',
+        #    'formatter': 'verbose',
+        #},
+        'file_django_log': {
+            'level': 'INFO',
+            #'class': 'logging.FileHandler',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'C:\PycharmProjects4\PycharmProjects4\log\Django_info.log',
+            'formatter': 'verbose',
+            'when':'D',
+            'interval':1,
+        },
+        'file_django_debug_log': {
+            'level': 'DEBUG',
+            #'class': 'logging.FileHandler',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': 'C:\PycharmProjects4\PycharmProjects4\log\Django_debug.log',
+            'formatter': 'verbose',
+            'when':'D',
+            'interval':1,
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file_django_log','file_django_debug_log'],  # ハンドラは複数渡せる。
+        'level': 'DEBUG',
+        'propagate': True,
+    },
+    #'loggers': {
+    #    'django': {
+    #        'handlers': ['file_django_log'],
+    #        'level': 'DEBUG',
+    #        'propagate': True,
+    #    },
+    #},
+    
+}
 try:
     from develop.development import *
 except ImportError:
