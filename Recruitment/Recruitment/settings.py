@@ -89,10 +89,10 @@ WSGI_APPLICATION = 'Recruitment.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sampledb',
-        'USER': 'fukuda',
-        'PASSWORD': 'fukuda',
-        'HOST': 'localhost',
+        'NAME': 'DBname',
+        'USER': 'username',
+        'PASSWORD': 'passwd',
+        'HOST': 'server',
         'OPTIONS' :{
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
