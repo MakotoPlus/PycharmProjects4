@@ -1,24 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+	<div class="container" >
+		優先順位設定</br></br>
+		{% if message %}<p><strong><font color=red>{{ message }}</font></strong></p>{% endif %}
+		<form method="post">
+			{% csrf_token %}
 
-優先順位設定</br></br>
+			<div class="container">
+				<div class="row">
+				<table class="table">
+					{{ formset.as_table }}
+				</table>
+				{{ formset.management_form }}
+				<button type="submit" class="btn btn-primary">登録</button>
+			</div>
 
-{% if message %}<p><strong><font color=red>{{ message }}</font></strong></p>{% endif %}
-<form method="post">
-	{% csrf_token %}
-
-	<div class="container">
-		<div class="row">
-		<table class="table">
-			{{ formset.as_table }}
-		</table>
-		{{ formset.management_form }}
-		<button type="submit" class="btn btn-primary">登録</button>
+		</form>
 	</div>
-
-</form>
 {% endblock%}
-
-</body>
-</html>

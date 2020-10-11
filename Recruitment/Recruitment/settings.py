@@ -20,13 +20,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = '2ec4m6#l15m2_lf(ayc=09iu2*xtbi^7h(t4a7q16@&m_hdjxq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -80,24 +80,25 @@ WSGI_APPLICATION = 'Recruitment.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#    }
-#}
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DBname',
-        'USER': 'username',
-        'PASSWORD': 'passwd',
-        'HOST': 'server',
-        'OPTIONS' :{
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'DBname',
+#        'USER': 'username',
+#        'PASSWORD': 'passwd',
+#        'HOST': 'server',
+#        'OPTIONS' :{
+#            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#        }
+#    }
+#}
 
 
 
@@ -123,14 +124,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-#LANGUAGE_CODE = 'ja'
+#LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
-TIME_ZONE = 'UTC'
-#TIME_ZONE = 'Asia/Tokyo'
+#TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
-
 USE_L10N = True
 
 USE_TZ = True
@@ -140,7 +140,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'C:\PycharmProjects4\PycharmProjects4\static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # ログイン時のリダイレクトURL
 LOGIN_REDIRECT_URL ='/applicantctl/'
@@ -164,6 +164,9 @@ EMAIL_SSL_KEYFILE = None
 EMAIL_TIMEOUT = None
 DEFAULT_FROM_EMAIL = ''
 SERVER_EMAIL = ''
+
+
+LOG_DIR = os.path.join(BASE_DIR, 'log')
 
 # ログ設定
 LOGGING = {
@@ -208,22 +211,22 @@ LOGGING = {
         #    'formatter': 'verbose',
         #},
         'file_django_log': {
-            'level': 'INFO',
-            #'class': 'logging.FileHandler',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'C:\PycharmProjects4\PycharmProjects4\log\Django_info.log',
-            'formatter': 'verbose',
-            'when':'D',
-            'interval':1,
+            'level': 'INFO'
+            #,'class': 'logging.FileHandler'
+            ,'class': 'logging.handlers.TimedRotatingFileHandler'
+            ,'filename': os.path.join( LOG_DIR, 'Django_info.log' )
+            ,'formatter': 'verbose'
+            ,'when':'D'
+            ,'interval':1
         },
         'file_django_debug_log': {
-            'level': 'DEBUG',
-            #'class': 'logging.FileHandler',
-            'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'C:\PycharmProjects4\PycharmProjects4\log\Django_debug.log',
-            'formatter': 'verbose',
-            'when':'D',
-            'interval':1,
+            'level': 'DEBUG'
+            #,'class': 'logging.FileHandler'
+            ,'class': 'logging.handlers.TimedRotatingFileHandler'
+            ,'filename': os.path.join( LOG_DIR, 'Django_debug.log' )
+            ,'formatter': 'verbose'
+            ,'when':'D'
+            ,'interval':1
         },
     },
     'root': {

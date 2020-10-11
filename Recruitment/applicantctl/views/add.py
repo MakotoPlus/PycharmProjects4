@@ -8,14 +8,14 @@ from django.forms import modelformset_factory
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import connection, transaction
 from django.http import HttpResponseRedirect
-from ..util.logger import logger
-from ..forms.T_Applicant_infoForm import T_Applicant_infoCreateFormSet
-from ..models import T_Applicant_info
+from applicantctl.util.logger import logger
+from applicantctl.forms.T_Applicant_infoForm import T_Applicant_infoCreateFormSet
+from applicantctl.models import T_Applicant_info
 
 import logging
 log = logging.getLogger(__name__)
 
-@logger(func_name="add_func")
+#@logger(func_name="add_func")
 @login_required
 def add_func(request):
     #新規Formしか不要な場合

@@ -7,40 +7,33 @@ from django.forms import modelformset_factory
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import connection, transaction
 from django.http import HttpResponseRedirect
-from ..util.logger import logger
-from ..forms.JudgmentCreate_Form import JudgmenAdd_CreateFormSet
-from ..forms.T_Judgment_Form import T_Judgment_Form
-from ..models import T_Judgment, T_Applicant_info
+from applicantctl.util.logger import logger
+from applicantctl.forms.JudgmentCreate_Form import JudgmenAdd_CreateFormSet
+from applicantctl.forms.T_Judgment_Form import T_Judgment_Form
+from applicantctl.models import T_Judgment, T_Applicant_info
 from datetime import datetime, timedelta
 from django.utils import timezone
 from applicantctl.util.original_exception import OriginalException
 
-#from ..forms import (
-#    T_Applicant_infoForm, T_Applicant_infoCreateFormSet, SearchForm, SearchFormSet,
-#    T_Judgment_Form, T_Judgment_CreateFormSet, JudgmentUpd_Form, Judgment_UpdateFormSet,
-#    T_Applicant_infoUpdateFormSet, JudgmenAdd_CreateFormSet, JudgmentCreate_Form,
-#    T_Applicant_info, M_Appl_Route, M_Work_History, T_Judgment
-#    )
 
 import logging
 log = logging.getLogger(__name__)
 
 #
 # pk = 応募者情報.応募者情報キー
-@logger(func_name="add_judgment_func")
+# @logger(func_name="add_judgment_func")
 @login_required 
 @transaction.atomic
 def add_judgment_func(request, pk):
-    # 応募者情報キーを使って判定テーブルにデータが存在するか確認
-    #
-    formset = JudgmenAdd_CreateFormSet(request.POST or None, queryset=T_Judgment.objects.filter(key_applicant=pk))
     message = ''
-
-    if len(formset) < 3 :
-        #
-        # データが3件未満の場合は、存在件数＋新規登録で3件の入力フォームを作成する
-        rformset = modelformset_factory(T_Judgment, form=T_Judgment_Form, extra=(3-(len(formset))))
-        formset = rformset(request.POST or None, queryset=T_Judgment.objects.filter(key_applicant=pk))
+    rformset = modelformset_factory(T_Judgment, form=T_Judgment_Form, extra=3, max_num=3)
+    #現在の登録件数を取得して、優先順位の初期値を設定する
+    records = T_Judgment.objects.filter(key_applicant=pk)
+    init_cnt = 0 if records is None else len(records)
+    judgment_inital = [{'judgment_index':init_cnt + 1},{'judgment_index':init_cnt + 2},{'judgment_index':init_cnt + 3}]
+    formset = rformset(request.POST or None,    \
+                initial=judgment_inital,        \
+                queryset=T_Judgment.objects.filter(key_applicant=pk))
 
     if request.method == 'POST' and formset.is_valid():
         # DEBUG
@@ -107,8 +100,6 @@ def add_judgment_func(request, pk):
             # エラーメッセージ設定
             message = '優先順位を重複に設定出来ません'
 
-    #raise OriginalException('OriginalException!!だよ')    
-    
     context = {
         'formset' : formset,
         'message' : message,
