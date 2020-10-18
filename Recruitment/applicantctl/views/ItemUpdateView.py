@@ -3,10 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.db import transaction
-from ..util.logger import logger
-from ..forms.JudgmentUpd_Form import JudgmentUpd_Form
-from ..models import T_Judgment
+from applicantctl.util.logger import logger
+from applicantctl.forms.JudgmentUpd_Form import JudgmentUpd_Form
+from applicantctl.models import T_Judgment
 import logging
+
 log = logging.getLogger(__name__)
 
 

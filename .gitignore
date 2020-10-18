@@ -21,3 +21,5 @@ Recruitment/develop/
 /Recruitment/applicantctl/migrations/__pycache__
 /Recruitment/applicantctl/templatetags/__pycache__
 /Recruitment/mytest/util/__pycache__
+/Recruitment/secretkey/
+/Recruitment/secretkey/secretkey.py

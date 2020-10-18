@@ -52,6 +52,7 @@
           <th>第3優先部</th>
           <th>判定</th>
           <th>設定</th>
+          <th></th>
         </tr>
 		</thead>
 		<tbody>
@@ -108,7 +109,10 @@
 		        <a href="{% url 'applicantctl:add_judgment' column %}">設定</a>
 	        {% endfor %}
 	        </td>
-          </tr>
+	        <td>
+				<a href="{% url 'applicantctl:mail' record.0 %}">Mail</a>
+	        </td>
+		</tr>
         {% endfor %}
 		</tbody>
 	</table>

@@ -22,8 +22,8 @@ log = logging.getLogger(__name__)
 def index_func(request):
     forms = SearchFormSet(request.GET or None)
     #セッション情報の出力
-    print( '残っているセッション情報')
-    keys = request.session.keys()
+    #print( '残っているセッション情報')
+    #keys = request.session.keys()
 
     """
     GETパラメータのキー内容について。
@@ -156,6 +156,9 @@ def index_func(request):
     cursor.execute(sSql)
     rows = cursor.fetchall()
     page_obj = paginate_queryset( request, rows, 10 )
+
+
+    
 
     #print( '-------------------------------------------------------------------' )
     #print( forms )

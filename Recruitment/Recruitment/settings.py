@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+# セキュリティ情報は secretkeyファイルに記述
+from secretkey import secretkey
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2ec4m6#l15m2_lf(ayc=09iu2*xtbi^7h(t4a7q16@&m_hdjxq'
+SECRET_KEY = secretkey.SECRET_KEY_VALUE
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
     'bootstrap_datepicker_plus',
     'bootstrap4',
     'mytest',
+    'widget_tweaks', 
 ]
 
 MIDDLEWARE = [
@@ -70,6 +74,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'builtins':[ 
+                'bootstrap4.templatetags.bootstrap4',
+            ],
         },
     },
 ]
@@ -80,12 +87,7 @@ WSGI_APPLICATION = 'Recruitment.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+
 
 #DATABASES = {
 #    'default': {
@@ -155,16 +157,16 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_LOCALTIME = False
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = secretkey.EMAIL_HOST_USER_VALUE
+EMAIL_HOST_PASSWORD = secretkey.EMAIL_HOST_PASSWORD_VALUE
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_SSL_CERTFILE = None
 EMAIL_SSL_KEYFILE = None
 EMAIL_TIMEOUT = None
-DEFAULT_FROM_EMAIL = ''
-SERVER_EMAIL = ''
-
+DEFAULT_FROM_EMAIL = secretkey.DEFAULT_FROM_EMAIL_VALUE
+SERVER_EMAIL = secretkey.SERVER_EMAIL_VALUE
+SEND_MAIL_ADRESS = secretkey.SEND_MAIL_ADRESS_VALUE
 
 LOG_DIR = os.path.join(BASE_DIR, 'log')
 
@@ -199,17 +201,6 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
-        #'mail_admins': {
-        #    'level': 'ERROR',
-        #    'filters': ['require_debug_false'],
-        #    'class': 'django.utils.log.AdminEmailHandler'
-        #},
-        #'file_images_importer': {
-        #    'level': 'DEBUG',
-        #    'class': 'logging.FileHandler',
-        #    'filename': 'C:\PycharmProjects4\log\Django_debug.log',
-        #    'formatter': 'verbose',
-        #},
         'file_django_log': {
             'level': 'INFO'
             #,'class': 'logging.FileHandler'

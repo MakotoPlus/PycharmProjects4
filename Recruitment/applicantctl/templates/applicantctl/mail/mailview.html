@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+	<div class="container">
+		<h5>応募者情報</h5><br>
+	
+		<div class="row">
+			<div class="col-2">
+				応募日:
+			</div>
+			<div class="col">
+				{{app_info.1}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-2">
+				応募者No:
+			</div>
+			<div class="col">
+				{{app_info.2}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-2">
+				応募者名:
+			</div>
+			<div class="col">
+				{{app_info.3}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-2">
+				経歴:
+			</div>
+			<div class="col">
+				{{app_info.4}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-2">
+				応募経路:
+			</div>
+			<div class="col">
+				{{app_info.5}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-2">
+				第1優先部 
+			</div>
+			<div class="col">
+				<span class="badge {{app_info.15}}">{{app_info.7|default_if_none:""}}</span>{{app_info.6|default_if_none:""}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-2">
+				第2優先部 
+			</div>
+			<div class="col">
+				<span class="badge {{app_info.16}}">{{app_info.9|default_if_none:""}}</span>{{app_info.8|default_if_none:""}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-2">
+				第3優先部 
+			</div>
+			<div class="col">
+				<span class="badge {{app_info.17}}">{{app_info.11|default_if_none:""}}</span>{{app_info.10|default_if_none:""}}
+			</div>
+		</div>
+	</div>
+	<br/>
+	</div>
+	<div class="container">
+		<form method="post" action="">			
+			{{ form.management_form }}
+			{% csrf_token %}
+			{%for field in form %}
+				{% bootstrap_field field.subject show_label=True %}
+				{% bootstrap_field field.body show_label=True %}
+			{% endfor %}
+			{% buttons %}
+			<button type="submit" class="btn btn-primary">Mail Send</button>
+			<button type="button" class="btn btn-primary" onclick='history.back()'>Back</button>
+			{% endbuttons %}
+
+		</form>
+	</div>
+
+	
+
+{% endblock%}

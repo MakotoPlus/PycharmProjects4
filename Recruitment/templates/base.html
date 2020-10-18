@@ -1,7 +1,10 @@
 {% load static %}
 <!doctype html>
-<html lang="ja">
- <head>
+<html lang="ja">  
+    <head>
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+    {% load bootstrap4 %}
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -37,6 +40,15 @@ html {
         </ul>
     </div>
 </nav>
+{% if messages %}
+    {% for message in messages %}
+        <div class="{{ message|bootstrap_message_classes }} alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&#215;</button>
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
 {% endblock %}
 {% block content %}{% endblock %}
 {% block fotter %}
