@@ -8,14 +8,14 @@ from django.forms import modelformset_factory
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import connection, transaction
 from django.http import HttpResponseRedirect
-from ..util.logger import logger
-from ..forms.T_Applicant_infoForm import T_Applicant_infoUpdateFormSet, T_Applicant_infoForm
-from ..models import T_Applicant_info
+from applicantctl.util.logger import logger
+from applicantctl.forms.T_Applicant_infoForm import T_Applicant_infoUpdateFormSet, T_Applicant_infoForm
+from applicantctl.models import T_Applicant_info
 
 import logging
 log = logging.getLogger(__name__)
 
-@logger(func_name="upd_func")
+#@logger(func_name="upd_func")
 @login_required 
 @transaction.atomic
 def upd_func(request, pk):

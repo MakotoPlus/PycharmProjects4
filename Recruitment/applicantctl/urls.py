@@ -2,8 +2,9 @@
 from django.urls import include, path
 from django.conf.urls import url
 from .views import index, add, add_judgment, upd
-from .views.ItemDeleteView import ItemDeleteView
-from .views.ItemUpdateView import ItemUpdateView
+from applicantctl.views.ItemDeleteView import ItemDeleteView
+from applicantctl.views.ItemUpdateView import ItemUpdateView
+from applicantctl.views.mail_view import MailView
 
 app_name ='applicantctl'
 
@@ -24,5 +25,7 @@ urlpatterns = [
     path('delete/<int:pk>/', ItemDeleteView.as_view(), name='delete'), 
     # ex: /judgment/1/
     path('upd/judgment/<int:pk>/', ItemUpdateView.as_view(), name='upd_judgment'),
+    # ex: /mail/<int:pk>/
+    path('mail/<int:pk>/', MailView.as_view(), name='mail'),
 
 ]

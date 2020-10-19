@@ -8,34 +8,22 @@ from django.forms import modelformset_factory
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import connection, transaction
 from django.http import HttpResponseRedirect
-from ..util.logger import logger
-from ..forms.SearchForm import SearchForm, SearchFormSet
+from applicantctl.util.logger import logger
+from applicantctl.forms.SearchForm import SearchForm, SearchFormSet
 import logging
 from applicantctl.util.session_ctl import *
 
 log = logging.getLogger(__name__)
 
 # Create your views here.
+#@logger(func_name="index_func")
 @session_ctl('')
 @login_required 
-@logger(func_name="index_func")
 def index_func(request):
     forms = SearchFormSet(request.GET or None)
-
-
     #セッション情報の出力
-    print( '残っているセッション情報')
-    keys = request.session.keys()
-    print( keys )
-
-    request.session['KEY_01'] = 'abcdef'
-    request.session['KEY_02'] = 'abcdedddf'
-    request.session['KEY_03'] = 'abcdedddf'
-    request.session['KEY_04'] = 'abcdedddf'
-    request.session['KEY_05'] = 'abcdedddf'
-    request.session['KEY_06'] = 'abcdedddf'
-    #print( 'user=[%s]' % request.user )
-    #print( request.session.items())
+    #print( '残っているセッション情報')
+    #keys = request.session.keys()
 
     """
     GETパラメータのキー内容について。
@@ -110,6 +98,9 @@ def index_func(request):
             ,T_Judgment_1.key_judgment key_judgment_1
             ,T_Judgment_2.key_judgment key_judgment_2
             ,T_Judgment_3.key_judgment key_judgment_3
+            ,M_Judgment_1.badge_text badge_text_1
+            ,M_Judgment_2.badge_text badge_text_2
+            ,M_Judgment_3.badge_text badge_text_3
         from 
                 (
                     (
@@ -122,38 +113,38 @@ def index_func(request):
                                                 (
                                                     (
                                                         (
-                                                	        applicantctl_T_Applicant_info AS APPL
-                                                            left outer join applicantctl_T_Judgment As T_Judgment_1
+                                                	        T_Applicant_info AS APPL
+                                                            left outer join T_Judgment As T_Judgment_1
                                                             ON APPL.key_applicant = T_Judgment_1.key_applicant_id AND T_Judgment_1.judgment_index=1 
                                                         )
-                                                        left outer join applicantctl_T_Judgment As T_Judgment_2
+                                                        left outer join T_Judgment As T_Judgment_2
                                                             ON APPL.key_applicant = T_Judgment_2.key_applicant_id AND T_Judgment_2.judgment_index=2 
                                                     )
-                                                    left outer join applicantctl_T_Judgment As T_Judgment_3
+                                                    left outer join T_Judgment As T_Judgment_3
                                                     ON APPL.key_applicant = T_Judgment_3.key_applicant_id AND T_Judgment_3.judgment_index=3 
                                                 )
-                                                left outer join applicantctl_M_Department as M_Department_1
+                                                left outer join M_Department as M_Department_1
                                                     ON T_Judgment_1.key_department_id = M_Department_1.key_index
                                             )
-                                            left outer join applicantctl_M_Department as M_Department_2
+                                            left outer join M_Department as M_Department_2
                                                 ON T_Judgment_2.key_department_id = M_Department_2.key_index
                                         )
-                                        left outer join applicantctl_M_Department as M_Department_3
+                                        left outer join M_Department as M_Department_3
                                             ON T_Judgment_3.key_department_id = M_Department_3.key_index
                                     )
-                                    left outer join applicantctl_M_Judgment as M_Judgment_1
+                                    left outer join M_Judgment as M_Judgment_1
                                     ON T_Judgment_1.judgment_id = M_Judgment_1.key_judgment
                                 )
-                                left outer join applicantctl_M_Judgment as M_Judgment_2
+                                left outer join M_Judgment as M_Judgment_2
                                 ON T_Judgment_2.judgment_id = M_Judgment_2.key_judgment
                             )
-                            left outer  join applicantctl_M_Judgment as M_Judgment_3
+                            left outer  join M_Judgment as M_Judgment_3
                             ON T_Judgment_3.judgment_id = M_Judgment_3.key_judgment
                         )
-                        inner join applicantctl_M_Work_History as M_Work_History
+                        inner join M_Work_History as M_Work_History
                         ON APPL.key_history_kbn_id = M_Work_History.key_history_kbn
                     )
-                    inner join applicantctl_M_Appl_Route as M_Appl_Route
+                    inner join M_Appl_Route as M_Appl_Route
                     ON APPL.key_appl_route_id = M_Appl_Route.key_appl_route
                 )
             '''
@@ -165,6 +156,9 @@ def index_func(request):
     cursor.execute(sSql)
     rows = cursor.fetchall()
     page_obj = paginate_queryset( request, rows, 10 )
+
+
+    
 
     #print( '-------------------------------------------------------------------' )
     #print( forms )

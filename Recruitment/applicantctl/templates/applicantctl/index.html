@@ -40,11 +40,11 @@
 	<table class="table  table-hover col-sm-12" >
 		<thead>
           <th>No</th>
-          <th>応募日</th>
-          <th>応募者No.</th>
+          <th class="d-none d-sm-table-cell">応募日</th>
+          <th class="d-none d-sm-table-cell">応募者No.</th>
           <th>応募者名</th>
           <th>経歴</th>
-          <th>応募経路</th>
+          <th class="d-none d-sm-table-cell">応募経路</th>
           <th>第1優先部</th>
           <th>判定</th>
           <th>第2優先部</th>
@@ -52,6 +52,7 @@
           <th>第3優先部</th>
           <th>判定</th>
           <th>設定</th>
+          <th></th>
         </tr>
 		</thead>
 		<tbody>
@@ -59,18 +60,21 @@
           <tr>
 	        {% for column in record|slice:":12" %}
 	        	{% if forloop.counter0 == 3 %}
-			        {% for key_applicant in record|slice:":1" %}
+					{# 応募者名 #}
+					{% for key_applicant in record|slice:":1" %}
 				        <td><a href="{% url 'applicantctl:upd' key_applicant %}">{{ column }}</a></td>
 			        {% endfor %}
 	        	{% elif forloop.counter0 == 6 %}
-	        		{% if column == none %}
+					{# 第一優先部 #}
+					{% if column == none %}
 	        			<td></td>
 		        	{% else %}
 				      	{% for key_judgment_1 in record|slice:"12:13" %}
 				    		<td><a href="{% url 'applicantctl:upd_judgment' key_judgment_1 %}">{{ column }}</td>
 				        {% endfor %}
 		        	{% endif %}
-	        	{% elif forloop.counter0 == 8 %}
+				{% elif forloop.counter0 == 8 %}
+					{# 第二優先部 #}
 	        		{% if column == none %}
 	        			<td></td>
 		        	{% else %}
@@ -79,15 +83,25 @@
 				        {% endfor %}
 		        	{% endif %}
 	        	{% elif forloop.counter0 == 10 %}
-	        		{% if column == none %}
+					{# 第三優先部 #}
+					{% if column == none %}
 	        			<td></td>
 		        	{% else %}
 				      	{% for key_judgment_3 in record|slice:"14:15" %}
 				    		<td><a href="{% url 'applicantctl:upd_judgment' key_judgment_3 %}">{{ column }}</td>
 				        {% endfor %}
 		        	{% endif %}
-	        	{% else %}
-	            <td>{{ column|default_if_none:"" }}</td>
+				{% elif forloop.counter0 == 1 or forloop.counter0 == 2 or forloop.counter0 == 5 %}
+					{# 応募日, 応募No., 応募経路 #}
+					<td class="d-none d-sm-table-cell">{{ column|default_if_none:"" }}</td>
+				{% elif forloop.counter0 == 7 %}
+					<td><span class="badge {{record.15|safe}}">{{ column|default_if_none:"" }}</span></td>
+				{% elif forloop.counter0 == 9 %}
+					<td><span class="badge {{record.16|safe}}">{{ column|default_if_none:"" }}</span></td>
+				{% elif forloop.counter0 == 11 %}
+					<td><span class="badge {{record.17|safe}}">{{ column|default_if_none:"" }}</span></td>
+				{% else %}
+		            <td>{{ column|default_if_none:"" }}</td>
 	        	{% endif %}
 	        {% endfor %}
 	        <td>
@@ -95,7 +109,10 @@
 		        <a href="{% url 'applicantctl:add_judgment' column %}">設定</a>
 	        {% endfor %}
 	        </td>
-          </tr>
+	        <td>
+				<a href="{% url 'applicantctl:mail' record.0 %}">Mail</a>
+	        </td>
+		</tr>
         {% endfor %}
 		</tbody>
 	</table>

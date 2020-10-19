@@ -5,10 +5,15 @@ from django.utils import timezone
 
 #判定マスタ
 class M_Judgment(models.Model):
+    class Meta:
+        db_table = 'M_Judgment'
+        ordering = ['key_judgment']
     #判定値
     key_judgment = models.AutoField(primary_key=True)
     #判定内容
     judgment_text = models.CharField(max_length=100, verbose_name='判定内容')
+    #Badge color
+    badge_text = models.CharField(max_length=30, verbose_name='バッチの色', default='')
     #更新者
     u_user = models.CharField(max_length=100, verbose_name='更新者')
     #更新日
@@ -16,11 +21,29 @@ class M_Judgment(models.Model):
     def __str__(self):
         return self.judgment_text
 
-
-
+#応募者ステータス
+class M_Appl_Status(models.Model):
+    class Meta:
+        db_table = 'M_Appl_Status'
+        ordering = ['appl_status_kbn']
+    #応募者ステータスKEY
+    key_appl_status = models.AutoField(primary_key=True)
+    #応募者ステータス区分
+    appl_status_kbn = models.CharField(max_length=2, verbose_name='ステータス区分', default='00')
+    #ステータス
+    status_text = models.CharField(max_length=60, verbose_name='ステータス名', default='')
+    #更新者
+    u_user = models.CharField(max_length=100, verbose_name='更新者')
+    #更新日
+    u_date = models.DateTimeField(verbose_name='更新日時',auto_now=True)
+    def __str__(self):
+        return self.status_text
 
 #応募経路マスタ
 class M_Appl_Route(models.Model):
+    class Meta:
+        db_table = 'M_Appl_Route'
+        ordering = ['key_appl_route']
     #応募経路KEY
     key_appl_route = models.AutoField(primary_key=True)
     #応募経路
@@ -34,6 +57,9 @@ class M_Appl_Route(models.Model):
 
 #業務経歴マスタ
 class M_Work_History(models.Model):
+    class Meta:
+        db_table = 'M_Work_History'
+        ordering = ['key_history_kbn']
     #経歴区分KEY
     key_history_kbn = models.AutoField(primary_key=True)
     #経歴区分
@@ -47,6 +73,9 @@ class M_Work_History(models.Model):
 
 #部マスタ
 class M_Department(models.Model):
+    class Meta:
+        db_table = 'M_Department'
+        ordering = ['key_index']
     #部INDEX
     key_index = models.AutoField(primary_key=True, null=False)
     #本部名
@@ -62,12 +91,15 @@ class M_Department(models.Model):
 
 #応募者情報
 class T_Applicant_info(models.Model):
+    class Meta:
+        db_table = 'T_Applicant_info'
     #応募者情報キー
     key_applicant = models.AutoField(primary_key=True)
+    #応募者ステータス
+    key_appl_status = models.ForeignKey(M_Appl_Status, null=True, on_delete=models.PROTECT,verbose_name='ステータス')
     #応募日
     applicant_date = models.DateField(verbose_name='応募日')
     #応募経路KEY
-    # key_appl_route = models.IntegerField(null=True,verbose_name='応募経路')
     key_appl_route = models.ForeignKey(M_Appl_Route, null=True, on_delete=models.PROTECT,verbose_name='応募経路')
 
     #応募者№
@@ -93,6 +125,8 @@ class T_Applicant_info(models.Model):
 
 #判定テーブル
 class T_Judgment(models.Model):
+    class Meta:
+        db_table = 'T_Judgment'
     #
     CONST_JUDGMENT_INDEX = (( 1, '1'), (2, '2'), (3, '3'))
     #判定テーブルキー
