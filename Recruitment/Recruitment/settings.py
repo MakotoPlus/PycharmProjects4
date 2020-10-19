@@ -20,13 +20,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ''
+SECRET_KEY = '2ec4m6#l15m2_lf(ayc=09iu2*xtbi^7h(t4a7q16@&m_hdjxq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-#ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 's1f', 's1f.active.local']
+
 
 
 # Application definition
@@ -89,15 +90,21 @@ WSGI_APPLICATION = 'Recruitment.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DBname',
-        'USER': 'username',
-        'PASSWORD': 'passwd',
-        'HOST': 'server',
+        'NAME': 'recruitdb',
+#   mysql_native_password
+        'USER': 'rec_nat',
+        'PASSWORD': 'rec_native',
+
+#   caching_sha2_password
+#        'USER': 'rec',
+#        'PASSWORD': 'recpass',
+        'HOST': 'localhost',
         'OPTIONS' :{
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
     }
 }
+
 
 
 
@@ -184,7 +191,7 @@ LOGGING = {
             'style': '{',
         },
         'simple': {
-            'format': '[{levelname}][{module}] [{process:d}] [{thread:d}] [{message}]',
+            'format': '[{levelname}][{module}][{message}]',
             'style': '{',
         },
     },
@@ -192,7 +199,7 @@ LOGGING = {
     'handlers': {
         # ↓これは、DEBUGレベルでStreamHandler(標準出力)に、verboseフォーマッタの形式で出力するという意味
         'console': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
         },
@@ -211,7 +218,7 @@ LOGGING = {
             'level': 'INFO',
             #'class': 'logging.FileHandler',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'C:\PycharmProjects4\PycharmProjects4\log\Django_info.log',
+            'filename': 'C:\inetpub\PycharmProjects4\log\Django_info.log',
             'formatter': 'verbose',
             'when':'D',
             'interval':1,
@@ -220,7 +227,7 @@ LOGGING = {
             'level': 'DEBUG',
             #'class': 'logging.FileHandler',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': 'C:\PycharmProjects4\PycharmProjects4\log\Django_debug.log',
+            'filename': 'C:\inetpub\PycharmProjects4\log\Django_debug.log',
             'formatter': 'verbose',
             'when':'D',
             'interval':1,
@@ -240,6 +247,7 @@ LOGGING = {
     #},
     
 }
+
 try:
     from develop.development import *
 except ImportError:
