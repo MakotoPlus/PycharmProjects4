@@ -7,3 +7,4 @@ pywin32==227
 sqlparse==0.3.0
 wfastcgi==3.0.0
 bootstrap4==0.1.0
+widget_tweaks

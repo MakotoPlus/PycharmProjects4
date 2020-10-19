@@ -91,16 +91,27 @@ WSGI_APPLICATION = 'Recruitment.wsgi.application'
 
 #DATABASES = {
 #    'default': {
-#        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': 'DBname',
-#        'USER': 'username',
-#        'PASSWORD': 'passwd',
-#        'HOST': 'server',
-#        'OPTIONS' :{
-#            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#        }
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    }
 #}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'recruitdb',
+#   mysql_native_password
+        'USER': 'rec_nat',
+        'PASSWORD': 'rec_native',
+
+#   caching_sha2_password
+#        'USER': 'rec',
+#        'PASSWORD': 'recpass',
+        'HOST': 'localhost',
+        'OPTIONS' :{
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
+    }
+}
 
 
 
