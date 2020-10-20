@@ -98,20 +98,28 @@ WSGI_APPLICATION = 'Recruitment.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'recruitdb',
-#   mysql_native_password
-        'USER': 'rec_nat',
-        'PASSWORD': 'rec_native',
-
-#   caching_sha2_password
-#        'USER': 'rec',
-#        'PASSWORD': 'recpass',
-        'HOST': 'localhost',
+        'NAME': secretkey.DB_NAME,
+        'USER': secretkey.DB_USER,
+        'PASSWORD': secretkey.DB_PASS,
+        'HOST': secretkey.DB_HOST,
         'OPTIONS' :{
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
     }
 }
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.mysql',
+#        'NAME': 'recruitdb',
+#        'USER': 'rec_nat',
+#        'PASSWORD': 'rec_native',
+#
+#        'HOST': 'localhost',
+#        'OPTIONS' :{
+#            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#        }
+#    }
+#}
 
 
 
@@ -163,8 +171,8 @@ LOGIN_REDIRECT_URL ='/applicantctl/'
 DATE_INPUT_FORMATS = ('%Y/%m/%d','%Y-%m-%d')
 
 # メール送信設定
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = secretkey.EMAIL_HOST
 EMAIL_PORT = 587
 EMAIL_USE_LOCALTIME = False
