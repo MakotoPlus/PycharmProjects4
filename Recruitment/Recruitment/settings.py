@@ -163,9 +163,9 @@ LOGIN_REDIRECT_URL ='/applicantctl/'
 DATE_INPUT_FORMATS = ('%Y/%m/%d','%Y-%m-%d')
 
 # メール送信設定
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = secretkey.EMAIL_HOST
 EMAIL_PORT = 587
 EMAIL_USE_LOCALTIME = False
 EMAIL_HOST_USER = secretkey.EMAIL_HOST_USER_VALUE
